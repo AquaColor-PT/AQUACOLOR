@@ -38,6 +38,14 @@
       background: white;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
+    .project-title {
+      background: #e8f5e9;
+      padding: 10px 15px;
+      font-size: 20px;
+      color: #2e7d32;
+      font-weight: 600;
+      text-align: center;
+    }
     .project-top-half {
       display: flex;
       height: 300px;
@@ -98,6 +106,7 @@
   <section>
     <h2 class="section-title">Add New Project (Admin Only)</h2>
     <div class="admin-form">
+      <input type="text" id="projectTitle" placeholder="Project Title">
       <input type="text" id="beforeFile" placeholder="before1.jpg">
       <input type="text" id="afterFile" placeholder="after1.jpg">
       <button onclick="addProject()">Preview & Generate JSON</button>
@@ -128,6 +137,10 @@
       const box = document.createElement('div');
       box.className = 'project-box';
 
+      const title = document.createElement('div');
+      title.className = 'project-title';
+      title.textContent = project.title || 'Untitled Project';
+
       const topHalf = document.createElement('div');
       topHalf.className = 'project-top-half';
 
@@ -142,11 +155,13 @@
       topHalf.appendChild(beforeSide);
       topHalf.appendChild(afterSide);
 
+      box.appendChild(title);
       box.appendChild(topHalf);
       return box;
     }
 
     function addProject() {
+      const title = document.getElementById('projectTitle').value.trim();
       const before = document.getElementById('beforeFile').value.trim();
       const after = document.getElementById('afterFile').value.trim();
 
@@ -155,10 +170,7 @@
         return;
       }
 
-      const fullBefore = before;
-      const fullAfter = after;
-
-      const project = { before: fullBefore, after: fullAfter };
+      const project = { title, before, after };
 
       const previewContainer = document.getElementById('preview-box');
       previewContainer.innerHTML = '';
