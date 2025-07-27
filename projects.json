@@ -1,5 +1,7 @@
-{
-  "title": "kwamhlanga mall",
-  "before": "p1.png",
-  "after": "p2.png"
-}
+[
+  {
+    "name": "KWAMHLANGA",
+    "before": "p1.png",
+    "after": "p2.png"
+  }
+]
