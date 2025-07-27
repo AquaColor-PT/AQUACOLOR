@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Project Image</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 30px;
+      background-color: #f7f9fb;
+    }
+    h1 {
+      color: #2e7d32;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input[type="file"] {
+      display: block;
+      margin: 20px 0;
+    }
+    button {
+      background-color: #2e7d32;
+      color: white;
+      padding: 10px;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+    }
+    #preview {
+      margin-top: 20px;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload Project Image</h1>
+    <input type="file" id="project-image" accept="image/*">
+    <button onclick="uploadImage()">Upload</button>
+    <img id="preview" src="" style="display:none;">
+  </div>
+
+  <script>
+    function uploadImage() {
+      const fileInput = document.getElementById('project-image');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please select an image.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64 = e.target.result;
+
+        // Save to localStorage (simulated upload)
+        let gallery = JSON.parse(localStorage.getItem('projectGallery')) || [];
+        gallery.push(base64);
+        localStorage.setItem('projectGallery', JSON.stringify(gallery));
+
+        alert("Image uploaded!");
+        fileInput.value = "";
+      };
+
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
