@@ -3,144 +3,354 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Director - Upload Projects</title>
+  <title>AquaColor - Directors Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      margin: 0; padding: 20px;
-      background: #f3f6f9;
-      color: #222;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0; padding: 0;
+      background: #f7f9fb;
+      color: #273b28;
+    }
+    header {
+      background: #2e7d32;
+      color: white;
+      padding: 20px;
+      text-align: center;
     }
     h1 {
-      color: #2e7d32;
+      margin: 0;
     }
-    input[type="file"] {
-      display: block;
-      margin-bottom: 10px;
-    }
-    .preview img {
-      width: 200px;
-      margin: 10px;
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: white;
       border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    #downloadLink {
+    .login-section, .admin-section {
+      max-width: 500px;
+      margin: auto;
+    }
+    label {
       display: block;
-      margin-top: 20px;
-      color: #2e7d32;
-      font-weight: bold;
+      margin-top: 15px;
+      font-weight: 600;
     }
-    a.folder-link {
+    input[type="text"], input[type="password"], textarea {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    textarea {
+      min-height: 60px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #2e7d32;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #276626;
+    }
+    .director-list {
+      margin-top: 30px;
+    }
+    .director-card {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      background: #e6f2e6;
+    }
+    .director-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .director-details {
+      flex-grow: 1;
+    }
+    .director-details h3 {
+      margin: 0 0 5px 0;
+      color: #2e7d32;
+    }
+    .director-details p {
+      margin: 3px 0;
+    }
+    .director-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .director-actions button {
+      background-color: #388e3c;
+      font-size: 14px;
+      padding: 6px 10px;
+    }
+    .director-actions button.delete {
+      background-color: #d32f2f;
+    }
+    .director-actions button:hover {
+      opacity: 0.85;
+    }
+    .hidden {
+      display: none;
+    }
+    /* Export/Import JSON box */
+    #json-import {
+      width: 100%;
+      height: 150px;
+      margin-top: 15px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: vertical;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    #export-btn, #import-btn {
+      background-color: #2e7d32;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
       margin-top: 10px;
-      display: inline-block;
-      color: #1565c0;
-      font-weight: bold;
+      margin-right: 10px;
+    }
+    #export-btn:hover, #import-btn:hover {
+      background-color: #276626;
     }
   </style>
 </head>
 <body>
 
-  <h1>Director Project Upload</h1>
-  <p><a href="projects.html">← View Public Gallery</a></p>
+<header>
+  <h1>AquaColor - Directors Admin</h1>
+</header>
 
-  <div id="auth" style="margin-top:20px;">
-    <p>Enter password to access upload tools:</p>
-    <input type="password" id="passwordInput" />
-    <button onclick="checkPassword()">Login</button>
+<div class="container">
+
+  <!-- Login Section -->
+  <div class="login-section" id="login-section">
+    <h2>Admin Login</h2>
+    <label for="password">Enter Password:</label>
+    <input type="password" id="password" autocomplete="off" />
+    <button id="login-btn">Login</button>
+    <p id="login-error" style="color: red; display:none;">Incorrect password. Try again.</p>
   </div>
 
-  <div id="uploadSection" style="display:none;">
-    <form id="uploadForm">
-      <label>Before Image: <input type="file" id="before" accept="image/*" required /></label><br/>
-      <label>After Image: <input type="file" id="after" accept="image/*" required /></label><br/>
-      <button type="submit">Preview</button>
+  <!-- Admin Section (hidden until login) -->
+  <div class="admin-section hidden" id="admin-section">
+    <h2>Manage Directors</h2>
+
+    <form id="add-director-form">
+      <label for="image">Image Filename (e.g., director1.jpg)</label>
+      <input type="text" id="image" required placeholder="Image file name (must be in images/ folder)" />
+
+      <label for="name">Name</label>
+      <input type="text" id="name" required placeholder="Director's full name" />
+
+      <label for="role">Role</label>
+      <input type="text" id="role" required placeholder="Role in the company" />
+
+      <label for="bio">Bio</label>
+      <textarea id="bio" placeholder="Brief bio or description"></textarea>
+
+      <button type="submit">Add Director</button>
     </form>
 
-    <div class="preview" id="previewArea"></div>
-    <div id="addArea"></div>
+    <div class="director-list" id="director-list-admin">
+      <!-- Directors listed here for edit/delete -->
+    </div>
+
+    <h3>Export Directors JSON</h3>
+    <button id="export-btn">Copy Directors JSON to Clipboard</button>
+
+    <h3>Import Directors JSON</h3>
+    <textarea id="json-import" placeholder="Paste directors JSON here to import"></textarea>
+    <button id="import-btn">Import JSON</button>
   </div>
 
-  <script>
-    const SECRET = "tokollo2024"; // change this to your real password
+</div>
 
-    function checkPassword() {
-      const input = document.getElementById('passwordInput').value;
-      if (input === SECRET) {
-        document.getElementById('auth').style.display = 'none';
-        document.getElementById('uploadSection').style.display = 'block';
-      } else {
-        alert('Incorrect password!');
-      }
+<script>
+  const ADMIN_PASSWORD = "1234";
+
+  const loginSection = document.getElementById('login-section');
+  const adminSection = document.getElementById('admin-section');
+  const loginBtn = document.getElementById('login-btn');
+  const passwordInput = document.getElementById('password');
+  const loginError = document.getElementById('login-error');
+
+  const directorListAdmin = document.getElementById('director-list-admin');
+  const addForm = document.getElementById('add-director-form');
+  const exportBtn = document.getElementById('export-btn');
+  const importBtn = document.getElementById('import-btn');
+  const jsonImportArea = document.getElementById('json-import');
+
+  let directors = [];
+
+  async function loadDirectors() {
+    const stored = localStorage.getItem('directorsData');
+    if (stored) {
+      directors = JSON.parse(stored);
+      renderDirectorsAdmin();
+      return;
     }
+    try {
+      const res = await fetch('directors.json');
+      if (!res.ok) throw new Error('Failed to fetch directors.json');
+      directors = await res.json();
+      renderDirectorsAdmin();
+    } catch(e) {
+      alert('Could not load directors data.');
+    }
+  }
 
-    let projects = [];
+  function renderDirectorsAdmin() {
+    directorListAdmin.innerHTML = '';
+    if (directors.length === 0) {
+      directorListAdmin.innerHTML = '<p>No directors found.</p>';
+      return;
+    }
+    directors.forEach((dir, idx) => {
+      const div = document.createElement('div');
+      div.className = 'director-card';
 
-    fetch('images.json')
-      .then(res => res.json())
-      .then(data => { projects = data; })
-      .catch(() => { projects = []; });
-
-    document.getElementById('uploadForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const beforeFile = document.getElementById('before').files[0];
-      const afterFile = document.getElementById('after').files[0];
-
-      if (!beforeFile || !afterFile) {
-        alert("Please select both images.");
-        return;
-      }
-
-      const beforeURL = URL.createObjectURL(beforeFile);
-      const afterURL = URL.createObjectURL(afterFile);
-
-      const previewArea = document.getElementById('previewArea');
-      previewArea.innerHTML = `
-        <h3>Preview</h3>
-        <img src="${beforeURL}" alt="Before" />
-        <img src="${afterURL}" alt="After" />
+      div.innerHTML = `
+        <img src="images/${dir.image}" alt="${dir.name} photo" />
+        <div class="director-details">
+          <input type="text" value="${dir.image}" data-index="${idx}" data-field="image" placeholder="Image filename" />
+          <input type="text" value="${dir.name}" data-index="${idx}" data-field="name" placeholder="Name" />
+          <input type="text" value="${dir.role}" data-index="${idx}" data-field="role" placeholder="Role" />
+          <textarea data-index="${idx}" data-field="bio" placeholder="Bio">${dir.bio}</textarea>
+        </div>
+        <div class="director-actions">
+          <button class="save" data-index="${idx}">Save</button>
+          <button class="delete" data-index="${idx}">Delete</button>
+        </div>
       `;
 
-      const addArea = document.getElementById('addArea');
-      addArea.innerHTML = `
-        <p>Enter the exact image filenames as you’ll upload to GitHub:</p>
-        <input type="text" id="beforeName" placeholder="Before filename" required /><br/>
-        <input type="text" id="afterName" placeholder="After filename" required /><br/><br/>
-        <button onclick="addToProjects()">Add & Download JSON</button>
-        <a id="downloadLink"></a><br/>
-
-        <!-- Open GitHub folder -->
-        <a href="file:///C:/Users/tokol/OneDrive/Documents/GitHub/AQUACOLOR" target="_blank" class="folder-link">
-          🗂 Open GitHub Folder
-        </a>
-      `;
+      directorListAdmin.appendChild(div);
     });
 
-    function addToProjects() {
-      const beforeName = document.getElementById('beforeName').value.trim();
-      const afterName = document.getElementById('afterName').value.trim();
+    directorListAdmin.querySelectorAll('button.save').forEach(btn => {
+      btn.onclick = () => {
+        const i = btn.dataset.index;
+        const parent = btn.closest('.director-card');
+        if (!parent) return;
+        ['image','name','role','bio'].forEach(field => {
+          const input = parent.querySelector(`[data-field="${field}"]`);
+          if(input) directors[i][field] = input.value.trim();
+        });
+        saveDirectors();
+        alert('Director updated.');
+        renderDirectorsAdmin();
+      };
+    });
 
-      if (!beforeName || !afterName) {
-        alert("Please enter both filenames.");
-        return;
-      }
+    directorListAdmin.querySelectorAll('button.delete').forEach(btn => {
+      btn.onclick = () => {
+        const i = btn.dataset.index;
+        if(confirm('Are you sure you want to delete this director?')) {
+          directors.splice(i,1);
+          saveDirectors();
+          renderDirectorsAdmin();
+        }
+      };
+    });
+  }
 
-      projects.push({ before: beforeName, after: afterName });
+  function saveDirectors() {
+    localStorage.setItem('directorsData', JSON.stringify(directors));
+  }
 
-      const json = JSON.stringify(projects, null, 2);
-      const blob = new Blob([json], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
+  addForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const image = document.getElementById('image').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const role = document.getElementById('role').value.trim();
+    const bio = document.getElementById('bio').value.trim();
 
-      const link = document.getElementById('downloadLink');
-      link.href = url;
-      link.download = "images.json";
-      link.textContent = "⬇️ Download Updated images.json";
-
-      alert("✅ JSON updated. Click the download link and move it to your GitHub folder:\nC:\\Users\\tokol\\OneDrive\\Documents\\GitHub\\AQUACOLOR");
+    if(!image || !name || !role) {
+      alert('Image filename, Name and Role are required.');
+      return;
     }
-  </script>
+
+    directors.push({image, name, role, bio});
+    saveDirectors();
+    renderDirectorsAdmin();
+    addForm.reset();
+  });
+
+  loginBtn.addEventListener('click', () => {
+    const pw = passwordInput.value;
+    if(pw === ADMIN_PASSWORD) {
+      loginSection.classList.add('hidden');
+      adminSection.classList.remove('hidden');
+      loadDirectors();
+    } else {
+      loginError.style.display = 'block';
+    }
+  });
+
+  passwordInput.addEventListener('keydown', e => {
+    if(e.key === 'Enter') {
+      loginBtn.click();
+    }
+  });
+
+  exportBtn.addEventListener('click', () => {
+    if(directors.length === 0) {
+      alert('No directors to export.');
+      return;
+    }
+    const jsonStr = JSON.stringify(directors, null, 2);
+    navigator.clipboard.writeText(jsonStr).then(() => {
+      alert('Directors JSON copied to clipboard! Paste this in your directors.json file in your repo.');
+    }).catch(() => {
+      alert('Failed to copy. Please manually copy the JSON from below.');
+    });
+  });
+
+  importBtn.addEventListener('click', () => {
+    const jsonStr = jsonImportArea.value.trim();
+    if(!jsonStr) {
+      alert('Please paste valid JSON in the textarea.');
+      return;
+    }
+    try {
+      const imported = JSON.parse(jsonStr);
+      if(!Array.isArray(imported)) throw new Error('JSON must be an array of directors.');
+      directors = imported;
+      saveDirectors();
+      renderDirectorsAdmin();
+      alert('Directors JSON imported successfully!');
+    } catch (e) {
+      alert('Invalid JSON format: ' + e.message);
+    }
+  });
+</script>
+
 </body>
 </html>
