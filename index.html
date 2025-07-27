@@ -86,52 +86,6 @@
       margin-top: 10px;
       text-align: left;
     }
-    .admin-controls {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .admin-controls button, .login-button, #logout-btn {
-      background-color: #43a047;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
-    }
-    .admin-controls button:hover, .login-button:hover, #logout-btn:hover {
-      transform: translateY(-2px);
-      background-color: #2e7d32;
-    }
-    #director-form {
-      display: none;
-      margin-bottom: 40px;
-    }
-    .remove-button {
-      background-color: #d32f2f;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-    .login-button {
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      z-index: 999;
-    }
-    #logout-btn {
-      display: none;
-      position: fixed;
-      bottom: 50px;
-      left: 10px;
-      z-index: 999;
-    }
-
     /* Hamburger styles */
     #hamburger-btn {
       position: fixed;
@@ -144,7 +98,6 @@
       font-size: 28px;
       color: #273b28ff;
     }
-
     #side-panel {
       position: fixed;
       top: 0;
@@ -235,20 +188,13 @@
     <!-- Left: Directors -->
     <div style="flex: 1; min-width: 250px;">
       <div id="director-list">Loading...</div>
-
-      <div id="director-form">
-        <input type="file" id="director-photo" accept="image/*"><br>
-        <input type="text" id="director-name" placeholder="Full Name"><br>
-        <input type="text" id="director-role" placeholder="Role in the Company"><br>
-        <button onclick="saveDirector()">Save Director Info</button>
-      </div>
     </div>
 
     <!-- Right: Contact Info -->
     <div id="contact" style="flex: 1; min-width: 250px; background-color: #ffffff; padding: 20px; border-radius: 10px; border: 1px solid #dddddd;">
       <h3 style="color: #2e7d32; font-size: 20px; margin-bottom: 15px;">Contact Us</h3>
 
-      <p><strong>Phone:</strong> 076 500 6229/073 188 7519</p>
+      <p><strong>Phone:</strong> 076 500 6229 / 073 188</p>
       <p><strong>Email:</strong> <a href="mailto:tsimbinimark@gmail.com" style="color: #2e7d32; text-decoration: none;">tsimbinimark@gmail.com</a></p>
       <p><strong>Location:</strong> Diepsloot, Johannesburg</p>
       <p><strong>Message Us:</strong> <a href="#contact" style="color: #2e7d32; text-decoration: none;">Use the form below</a></p>
@@ -264,16 +210,11 @@
 <section class="contact">
   <h2>Send Us a Message</h2>
   <form action="https://formsubmit.co/tsimbinimark@gmail.com" method="POST">
+    <input type="hidden" name="_next" value="https://www.aquacolor.org/thank-you.html">
+    <input type="hidden" name="_captcha" value="false">
     <input type="text" name="name" placeholder="Your Name" required><br><br>
     <input type="email" name="email" placeholder="Your Email" required><br><br>
     <textarea name="message" placeholder="Your Message" rows="5" required></textarea><br><br>
-
-    <!-- Optional: Redirect to a "Thank you" page -->
-    <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
-
-    <!-- Optional: Disable CAPTCHA -->
-    <input type="hidden" name="_captcha" value="false">
-
     <button type="submit">Send Message</button>
   </form>
 </section>
@@ -282,100 +223,42 @@
   <p>&copy; 2025 AQUACOLOR. All rights reserved.</p>
 </footer>
 
-<button class="login-button" onclick="promptLogin()">Director Login</button>
-<button id="logout-btn" onclick="logoutDirector()">Logout</button>
-
-<div class="admin-controls" id="admin-controls">
-  <button onclick="toggleForm()">Add Director</button>
-</div>
-
 <script>
   const directorList = document.getElementById("director-list");
-  const directorForm = document.getElementById("director-form");
-  const adminControls = document.getElementById("admin-controls");
-  const logoutBtn = document.getElementById("logout-btn");
 
-  let isDirector = false;
-  const directors = JSON.parse(localStorage.getItem("directors") || "[]");
+  async function loadDirectors() {
+    try {
+      const response = await fetch('directors.json');
+      if (!response.ok) throw new Error("Failed to load directors.json");
+      const directors = await response.json();
 
-  function renderDirectors() {
-    directorList.innerHTML = "";
-    if (directors.length === 0) {
-      directorList.innerHTML = "<p>No directors added yet.</p>";
+      if (directors.length === 0) {
+        directorList.innerHTML = "<p>No directors found.</p>";
+        return;
+      }
+
+      directorList.innerHTML = "";
+      directors.forEach(dir => {
+        const div = document.createElement("div");
+        div.className = "director-card";
+        div.innerHTML = `
+          <img src="${dir.image}" alt="${dir.name} photo" />
+          <div class="director-info">
+            <h3>${dir.name}</h3>
+            <p><strong>Role:</strong> ${dir.role}</p>
+            <p>${dir.bio}</p>
+          </div>
+        `;
+        directorList.appendChild(div);
+      });
+    } catch (error) {
+      directorList.innerHTML = "<p>Could not load directors data.</p>";
+      console.error(error);
     }
-    directors.forEach((dir, index) => {
-      const div = document.createElement("div");
-      div.className = "director-card";
-      div.innerHTML = `
-        <img src="${dir.photo}" alt="Director Photo">
-        <div class="director-info">
-          <h3>${dir.name}</h3>
-          <p><strong>Role:</strong> ${dir.role}</p>
-          ${isDirector ? `<button class="remove-button" onclick="removeDirector(${index})">Remove</button>` : ""}
-        </div>
-      `;
-      directorList.appendChild(div);
-    });
-  }
-
-  function toggleForm() {
-    directorForm.style.display = directorForm.style.display === "none" ? "block" : "none";
-  }
-
-  function saveDirector() {
-    const reader = new FileReader();
-    const file = document.getElementById("director-photo").files[0];
-    const name = document.getElementById("director-name").value;
-    const role = document.getElementById("director-role").value;
-
-    if (file && name && role) {
-      reader.onload = function (e) {
-        const newDirector = { photo: e.target.result, name, role };
-        directors.push(newDirector);
-        localStorage.setItem("directors", JSON.stringify(directors));
-        renderDirectors();
-        toggleForm();
-        // Reset form fields manually:
-        document.getElementById("director-photo").value = "";
-        document.getElementById("director-name").value = "";
-        document.getElementById("director-role").value = "";
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert("Please fill in all fields and select a photo.");
-    }
-  }
-
-  function removeDirector(index) {
-    if (confirm("Are you sure you want to remove this director?")) {
-      directors.splice(index, 1);
-      localStorage.setItem("directors", JSON.stringify(directors));
-      renderDirectors();
-    }
-  }
-
-  function promptLogin() {
-    const password = prompt("Enter password for director access:");
-    if (password === "1234") {
-      isDirector = true;
-      adminControls.style.display = "flex";
-      logoutBtn.style.display = "block";
-      renderDirectors();
-    } else {
-      alert("Incorrect password.");
-    }
-  }
-
-  function logoutDirector() {
-    isDirector = false;
-    adminControls.style.display = "none";
-    logoutBtn.style.display = "none";
-    directorForm.style.display = "none";
-    renderDirectors();
   }
 
   window.onload = () => {
-    renderDirectors();
+    loadDirectors();
   };
 
   // Hamburger menu script
@@ -384,12 +267,12 @@
   const closePanelBtn = document.getElementById('close-panel');
 
   hamburgerBtn.addEventListener('click', () => {
-    sidePanel.style.left = '0'; // slide in
+    sidePanel.style.left = '0';
     sidePanel.setAttribute('aria-hidden', 'false');
   });
 
   closePanelBtn.addEventListener('click', () => {
-    sidePanel.style.left = '-250px'; // slide out
+    sidePanel.style.left = '-250px';
     sidePanel.setAttribute('aria-hidden', 'true');
   });
 
