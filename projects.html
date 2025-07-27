@@ -8,155 +8,141 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 20px;
+      max-width: 900px;
+      margin: 20px auto;
       background: #f7f9fb;
       color: #333;
-      max-width: 1000px;
-      margin-left: auto;
-      margin-right: auto;
+      padding: 0 15px 40px;
+      box-sizing: border-box;
     }
-
     h1 {
       color: #2e7d32;
       text-align: center;
+      margin-bottom: 10px;
     }
-
     a {
       color: #2e7d32;
       text-decoration: none;
       font-weight: 600;
+      display: inline-block;
+      margin-bottom: 30px;
     }
-
-    .gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 60px;
-      margin-top: 40px;
-    }
-
     .project {
+      border: 2px solid #2e7d32;
+      border-radius: 12px;
+      margin-bottom: 40px;
+      padding: 15px;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .project-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .before-after-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      height: 320px;
+      max-height: 70vh;
+    }
+    .half {
+      flex: 1 1 45%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
+      background: #e6f2e6;
+      border-radius: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+      box-shadow: inset 0 0 5px rgba(46,125,50,0.2);
+      min-width: 280px;
     }
-
-    .project h3 {
-      margin-bottom: 15px;
+    .half label {
+      font-weight: 600;
       color: #2e7d32;
-      font-size: 22px;
+      margin-bottom: 10px;
+      font-size: 18px;
     }
-
-    .image-row {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      gap: 20px;
+    .half img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      flex-grow: 1;
     }
-
-    .image-column {
-      flex: 1;
-      text-align: center;
-    }
-
-    .image-column h4 {
-      color: #555;
-      margin-bottom: 8px;
-    }
-
-    .image-column img {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    @media (max-width: 650px) {
+      .before-after-container {
+        flex-direction: column;
+        height: auto;
+      }
+      .half {
+        flex: 1 1 100%;
+        min-width: auto;
+        height: auto;
+      }
+      .half img {
+        max-height: 250px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Our Projects</h1>
-  <p style="text-align: center;"><a href="index.html">← Back to Home</a></p>
 
-  <div class="gallery" id="gallery"></div>
+  <h1>Our Projects</h1>
+  <a href="index.html">← Back to Home</a>
+
+  <div id="projects-container">Loading projects...</div>
 
   <script>
-    fetch('visibility.json')
-      .then(response => response.json())
-      .then(visibilityData => {
-        if (!visibilityData.visible) {
-          document.getElementById('gallery').innerHTML = `
-            <p style="color: #d32f2f; font-weight: bold; font-size: 18px; text-align: center;">
-              Projects not available at the moment.
-            </p>`;
+    async function loadProjects() {
+      try {
+        const response = await fetch('projects.json');
+        if (!response.ok) throw new Error('Failed to load projects.json');
+        const projects = await response.json();
+        const container = document.getElementById('projects-container');
+
+        if (projects.length === 0) {
+          container.innerHTML = '<p>No projects available at the moment.</p>';
           return;
         }
 
-        fetch('projects.json')
-          .then(response => response.json())
-          .then(projects => {
-            const gallery = document.getElementById('gallery');
-            if (!projects || projects.length === 0) {
-              gallery.innerHTML = `
-                <p style="color: red; font-weight: bold; text-align: center;">
-                  No projects available yet.
-                </p>`;
-              return;
-            }
+        container.innerHTML = ''; // clear loading
 
-            projects.forEach(project => {
-              const div = document.createElement('div');
-              div.className = 'project';
+        projects.forEach(proj => {
+          const projectDiv = document.createElement('div');
+          projectDiv.className = 'project';
 
-              const title = document.createElement('h3');
-              title.textContent = project.name;
+          projectDiv.innerHTML = `
+            <div class="project-title">${proj.name}</div>
+            <div class="before-after-container">
+              <div class="half">
+                <label>Before</label>
+                <img src="${proj.before}" alt="Before image of ${proj.name}" />
+              </div>
+              <div class="half">
+                <label>After</label>
+                <img src="${proj.after}" alt="After image of ${proj.name}" />
+              </div>
+            </div>
+          `;
 
-              const row = document.createElement('div');
-              row.className = 'image-row';
+          container.appendChild(projectDiv);
+        });
 
-              const beforeCol = document.createElement('div');
-              beforeCol.className = 'image-column';
-              const beforeLabel = document.createElement('h4');
-              beforeLabel.textContent = "Before";
-              const beforeImg = document.createElement('img');
-              beforeImg.src = project.before;
-              beforeImg.alt = "Before Image";
-              beforeCol.appendChild(beforeLabel);
-              beforeCol.appendChild(beforeImg);
+      } catch (err) {
+        document.getElementById('projects-container').innerHTML = '<p>Could not load projects.</p>';
+        console.error(err);
+      }
+    }
 
-              const afterCol = document.createElement('div');
-              afterCol.className = 'image-column';
-              const afterLabel = document.createElement('h4');
-              afterLabel.textContent = "After";
-              const afterImg = document.createElement('img');
-              afterImg.src = project.after;
-              afterImg.alt = "After Image";
-              afterCol.appendChild(afterLabel);
-              afterCol.appendChild(afterImg);
-
-              row.appendChild(beforeCol);
-              row.appendChild(afterCol);
-
-              div.appendChild(title);
-              div.appendChild(row);
-
-              gallery.appendChild(div);
-            });
-          })
-          .catch(error => {
-            console.error('Could not load projects.json:', error);
-            document.getElementById('gallery').innerHTML = `
-              <p style="color: red; font-weight: bold; text-align: center;">
-                Could not load project images.
-              </p>`;
-          });
-      })
-      .catch(error => {
-        console.error('Could not load visibility.json:', error);
-        document.getElementById('gallery').innerHTML = `
-          <p style="color: red; font-weight: bold; text-align: center;">
-            Could not load project visibility settings.
-          </p>`;
-      });
+    window.onload = loadProjects;
   </script>
+
 </body>
 </html>
