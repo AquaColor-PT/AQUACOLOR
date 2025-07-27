@@ -44,20 +44,26 @@
   <div class="gallery" id="gallery"></div>
 
   <script>
-    // Load images from localStorage
-    const gallery = document.getElementById('gallery');
-    const savedImages = JSON.parse(localStorage.getItem('projectImages')) || [];
-
-    function displayImages() {
-      gallery.innerHTML = '';
-      savedImages.forEach((src) => {
-        const img = document.createElement('img');
-        img.src = src;
-        gallery.appendChild(img);
+    fetch('projects/images.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Could not load images.json");
+        }
+        return response.json();
+      })
+      .then(images => {
+        const gallery = document.getElementById('gallery');
+        images.forEach(src => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = "AquaColor Project";
+          gallery.appendChild(img);
+        });
+      })
+      .catch(error => {
+        console.error('Error loading images:', error);
+        document.getElementById('gallery').innerHTML = "<p>Could not load project images.</p>";
       });
-    }
-
-    displayImages();
   </script>
 </body>
 </html>
