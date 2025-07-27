@@ -1,8 +1,5 @@
-[
-  {
-    "name": "Kitchen Makeover",
-    "before": "p1.png",
-    "after": "p2.png"
-  }
-  
-]
+{
+  "title": "kwamhlanga mall",
+  "before": "p1.png",
+  "after": "p2.png"
+}
