@@ -1,13 +1,10 @@
-[
+
+ [
   {
-    "name": "COMIMG SOON",
-    "before": "p1.jpg",
-    "after": "p2.jpg"
-  },
-  {
-    "name": "NOT AVAILABLE AT THE MOMENT",
+    "name": "COMING SOON",
     "before": "p1.jpg",
     "after": "p2.jpg"
   }
 ]
+
 
