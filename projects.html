@@ -46,6 +46,38 @@
       margin-bottom: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
+
+    /* Admin control styles */
+    #admin-panel {
+      margin: 20px 0;
+      padding: 15px;
+      border: 2px solid #2e7d32;
+      border-radius: 8px;
+      background: #e8f5e9;
+      max-width: 400px;
+    }
+    #admin-panel button {
+      margin-top: 10px;
+      padding: 8px 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      background-color: #2e7d32;
+      color: white;
+    }
+    #login-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      padding: 8px 15px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -53,38 +85,140 @@
   <p>Here are some of the transformations we’ve delivered for our clients.</p>
   <p><a href="index.html">← Back to Home</a></p>
 
+  <!-- Login Director button -->
+  <button id="login-btn">Login Director</button>
+
+  <!-- Admin panel - shown only after login -->
+  <div id="admin-panel" style="display:none;">
+    <h3>Admin Controls</h3>
+    <label>
+      <input type="checkbox" id="toggle-projects" />
+      Allow users to see projects
+    </label>
+    <br />
+    <button id="logout-btn">Logout</button>
+  </div>
+
   <div class="gallery" id="gallery"></div>
 
   <script>
-    fetch('projects.json')
-      .then(response => response.json())
-      .then(projects => {
-        const gallery = document.getElementById('gallery');
-        projects.forEach(project => {
-          const div = document.createElement('div');
-          div.className = 'project';
+    const loginBtn = document.getElementById('login-btn');
+    const adminPanel = document.getElementById('admin-panel');
+    const logoutBtn = document.getElementById('logout-btn');
+    const toggleProjectsCheckbox = document.getElementById('toggle-projects');
+    const gallery = document.getElementById('gallery');
 
-          const title = document.createElement('h3');
-          title.textContent = project.name;
+    const directorPin = "1234"; // Change this PIN as you want!
 
-          const beforeImg = document.createElement('img');
-          beforeImg.src = project.before;
-          beforeImg.alt = "Before";
+    // Check if director is logged in
+    function isLoggedIn() {
+      return localStorage.getItem('directorLoggedIn') === 'true';
+    }
 
-          const afterImg = document.createElement('img');
-          afterImg.src = project.after;
-          afterImg.alt = "After";
+    // Check if projects are allowed to show
+    function projectsAllowed() {
+      return localStorage.getItem('projectsAllowed') === 'true';
+    }
 
-          div.appendChild(title);
-          div.appendChild(beforeImg);
-          div.appendChild(afterImg);
-          gallery.appendChild(div);
+    // Load projects from JSON and display them
+    function loadProjects() {
+      fetch('projects.json')
+        .then(response => response.json())
+        .then(projects => {
+          gallery.innerHTML = '';
+          projects.forEach(project => {
+            const div = document.createElement('div');
+            div.className = 'project';
+
+            const title = document.createElement('h3');
+            title.textContent = project.name;
+
+            const beforeLabel = document.createElement('p');
+            beforeLabel.textContent = 'Before';
+
+            const beforeImg = document.createElement('img');
+            beforeImg.src = project.before;
+            beforeImg.alt = "Before";
+
+            const afterLabel = document.createElement('p');
+            afterLabel.textContent = 'After';
+
+            const afterImg = document.createElement('img');
+            afterImg.src = project.after;
+            afterImg.alt = "After";
+
+            div.appendChild(title);
+            div.appendChild(beforeLabel);
+            div.appendChild(beforeImg);
+            div.appendChild(afterLabel);
+            div.appendChild(afterImg);
+            gallery.appendChild(div);
+          });
+        })
+        .catch(error => {
+          console.error('Could not load projects.json:', error);
+          gallery.innerHTML = "<p>Could not load project images.</p>";
         });
-      })
-      .catch(error => {
-        console.error('Could not load projects.json:', error);
-        document.getElementById('gallery').innerHTML = "<p>Could not load project images.</p>";
-      });
+    }
+
+    // Show or hide projects based on toggle
+    function updateProjectsView() {
+      if (projectsAllowed()) {
+        loadProjects();
+      } else {
+        gallery.innerHTML = '<p style="text-align:center; color: #a00; font-weight: 600;">Projects not available at the moment.</p>';
+      }
+    }
+
+    // Show admin panel and set toggle state
+    function showAdminPanel() {
+      adminPanel.style.display = 'block';
+      loginBtn.style.display = 'none';
+      toggleProjectsCheckbox.checked = projectsAllowed();
+      updateProjectsView();
+    }
+
+    // Hide admin panel and show login button
+    function hideAdminPanel() {
+      adminPanel.style.display = 'none';
+      loginBtn.style.display = 'inline-block';
+      updateProjectsView();
+    }
+
+    // On page load
+    window.onload = () => {
+      if (isLoggedIn()) {
+        showAdminPanel();
+      } else {
+        hideAdminPanel();
+      }
+    };
+
+    // Login button clicked
+    loginBtn.addEventListener('click', () => {
+      const pin = prompt('Enter director PIN:');
+      if (pin === directorPin) {
+        localStorage.setItem('directorLoggedIn', 'true');
+        alert('Logged in as director!');
+        showAdminPanel();
+      } else {
+        alert('Incorrect PIN.');
+      }
+    });
+
+    // Logout button clicked
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('directorLoggedIn');
+      alert('Logged out.');
+      hideAdminPanel();
+    });
+
+    // Toggle checkbox changed
+    toggleProjectsCheckbox.addEventListener('change', (e) => {
+      localStorage.setItem('projectsAllowed', e.target.checked ? 'true' : 'false');
+      updateProjectsView();
+    });
+
   </script>
 </body>
 </html>
