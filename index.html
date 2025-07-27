@@ -86,6 +86,20 @@
       margin-top: 10px;
       text-align: left;
     }
+    #projects {
+      margin-top: 40px;
+    }
+    .project-card {
+      display: inline-block;
+      margin: 10px;
+      text-align: center;
+    }
+    .project-card img {
+      width: 200px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
     /* Hamburger styles */
     #hamburger-btn {
       position: fixed;
@@ -185,26 +199,23 @@
 <section class="directors-section">
   <h2>Meet Our Directors & Contact Us</h2>
   <div style="display: flex; flex-wrap: wrap; gap: 40px;">
-    <!-- Left: Directors -->
     <div style="flex: 1; min-width: 250px;">
       <div id="director-list">Loading...</div>
     </div>
-
-    <!-- Right: Contact Info -->
     <div id="contact" style="flex: 1; min-width: 250px; background-color: #ffffff; padding: 20px; border-radius: 10px; border: 1px solid #dddddd;">
       <h3 style="color: #2e7d32; font-size: 20px; margin-bottom: 15px;">Contact Us</h3>
-
       <p><strong>Phone:</strong> 076 500 6229 / 073 188</p>
       <p><strong>Email:</strong> <a href="mailto:tsimbinimark@gmail.com" style="color: #2e7d32; text-decoration: none;">tsimbinimark@gmail.com</a></p>
       <p><strong>Location:</strong> Diepsloot, Johannesburg</p>
       <p><strong>Message Us:</strong> <a href="#contact" style="color: #2e7d32; text-decoration: none;">Use the form below</a></p>
-
-      <a href="https://wa.me/2765006229" target="_blank"
-         style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color:#2e7d32; color: white; text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 14px;">
-        💬 Chat on WhatsApp
-      </a>
+      <a href="https://wa.me/2765006229" target="_blank" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color:#2e7d32; color: white; text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 14px;">💬 Chat on WhatsApp</a>
     </div>
   </div>
+</section>
+
+<section id="projects">
+  <h2>Our Projects</h2>
+  <div id="project-gallery"></div>
 </section>
 
 <section class="contact">
@@ -224,19 +235,16 @@
 </footer>
 
 <script>
-  const directorList = document.getElementById("director-list");
-
   async function loadDirectors() {
+    const directorList = document.getElementById("director-list");
     try {
       const response = await fetch('directors.json');
       if (!response.ok) throw new Error("Failed to load directors.json");
       const directors = await response.json();
-
       if (directors.length === 0) {
         directorList.innerHTML = "<p>No directors found.</p>";
         return;
       }
-
       directorList.innerHTML = "";
       directors.forEach(dir => {
         const div = document.createElement("div");
@@ -257,11 +265,32 @@
     }
   }
 
+  async function loadProjects() {
+    const gallery = document.getElementById("project-gallery");
+    try {
+      const res = await fetch("projects.json");
+      const projects = await res.json();
+      gallery.innerHTML = "";
+      projects.forEach(proj => {
+        const card = document.createElement("div");
+        card.className = "project-card";
+        card.innerHTML = `
+          <div><strong>${proj.name}</strong></div>
+          <img src="${proj.before}" alt="Before ${proj.name}" /><br>
+          <img src="${proj.after}" alt="After ${proj.name}" />
+        `;
+        gallery.appendChild(card);
+      });
+    } catch (err) {
+      gallery.innerHTML = "<p>Could not load project images.</p>";
+    }
+  }
+
   window.onload = () => {
     loadDirectors();
+    loadProjects();
   };
 
-  // Hamburger menu script
   const hamburgerBtn = document.getElementById('hamburger-btn');
   const sidePanel = document.getElementById('side-panel');
   const closePanelBtn = document.getElementById('close-panel');
