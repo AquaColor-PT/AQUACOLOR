@@ -9,7 +9,122 @@
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
+      background-color:<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - AquaColor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
       background-color: #f4fdf5;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 20px;
+    }
+    h2 {
+      color: #2e7d32;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="url"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #2e7d32;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #256429;
+    }
+    .project-preview {
+      margin-top: 30px;
+    }
+    .project {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background-color: white;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .project img {
+      width: 120px;
+      height: auto;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard - AquaColor</h1>
+  </header>
+  <main>
+    <h2>Add Project (Update JSON manually after upload)</h2>
+    <label for="before-url">Before Image URL</label>
+    <input type="url" id="before-url" placeholder="e.g. https://your-repo/project1.jpg" />
+
+    <label for="after-url">After Image URL</label>
+    <input type="url" id="after-url" placeholder="e.g. https://your-repo/project2.jpg" />
+
+    <button onclick="addPreview()">Preview Project</button>
+
+    <div class="project-preview" id="preview-section"></div>
+  </main>
+
+  <script>
+    function addPreview() {
+      const beforeUrl = document.getElementById('before-url').value;
+      const afterUrl = document.getElementById('after-url').value;
+
+      if (!beforeUrl || !afterUrl) {
+        alert('Please fill in both image URLs.');
+        return;
+      }
+
+      const preview = document.createElement('div');
+      preview.className = 'project';
+      preview.innerHTML = `
+        <div>
+          <h4>Before</h4>
+          <img src="${beforeUrl}" alt="Before Image">
+        </div>
+        <div>
+          <h4>After</h4>
+          <img src="${afterUrl}" alt="After Image">
+        </div>
+      `;
+
+      document.getElementById('preview-section').appendChild(preview);
+    }
+  </script>
+</body>
+</html>
+ #f4fdf5;
       color: #333;
     }
     header {
