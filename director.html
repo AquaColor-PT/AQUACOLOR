@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Director - Upload Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0; padding: 20px;
+      background: #f3f6f9;
+      color: #222;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      color: #2e7d32;
+    }
+    input[type="file"] {
+      display: block;
+      margin-bottom: 10px;
+    }
+    .preview img {
+      width: 200px;
+      margin: 10px;
+      border-radius: 10px;
+    }
+    #downloadLink {
+      display: block;
+      margin-top: 20px;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+    a.folder-link {
+      margin-top: 10px;
+      display: inline-block;
+      color: #1565c0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Director Project Upload</h1>
+  <p><a href="projects.html">← View Public Gallery</a></p>
+
+  <div id="auth" style="margin-top:20px;">
+    <p>Enter password to access upload tools:</p>
+    <input type="password" id="passwordInput" />
+    <button onclick="checkPassword()">Login</button>
+  </div>
+
+  <div id="uploadSection" style="display:none;">
+    <form id="uploadForm">
+      <label>Before Image: <input type="file" id="before" accept="image/*" required /></label><br/>
+      <label>After Image: <input type="file" id="after" accept="image/*" required /></label><br/>
+      <button type="submit">Preview</button>
+    </form>
+
+    <div class="preview" id="previewArea"></div>
+    <div id="addArea"></div>
+  </div>
+
+  <script>
+    const SECRET = "tokollo2024"; // change this to your real password
+
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value;
+      if (input === SECRET) {
+        document.getElementById('auth').style.display = 'none';
+        document.getElementById('uploadSection').style.display = 'block';
+      } else {
+        alert('Incorrect password!');
+      }
+    }
+
+    let projects = [];
+
+    fetch('images.json')
+      .then(res => res.json())
+      .then(data => { projects = data; })
+      .catch(() => { projects = []; });
+
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const beforeFile = document.getElementById('before').files[0];
+      const afterFile = document.getElementById('after').files[0];
+
+      if (!beforeFile || !afterFile) {
+        alert("Please select both images.");
+        return;
+      }
+
+      const beforeURL = URL.createObjectURL(beforeFile);
+      const afterURL = URL.createObjectURL(afterFile);
+
+      const previewArea = document.getElementById('previewArea');
+      previewArea.innerHTML = `
+        <h3>Preview</h3>
+        <img src="${beforeURL}" alt="Before" />
+        <img src="${afterURL}" alt="After" />
+      `;
+
+      const addArea = document.getElementById('addArea');
+      addArea.innerHTML = `
+        <p>Enter the exact image filenames as you’ll upload to GitHub:</p>
+        <input type="text" id="beforeName" placeholder="Before filename" required /><br/>
+        <input type="text" id="afterName" placeholder="After filename" required /><br/><br/>
+        <button onclick="addToProjects()">Add & Download JSON</button>
+        <a id="downloadLink"></a><br/>
+
+        <!-- Open GitHub folder -->
+        <a href="file:///C:/Users/tokol/OneDrive/Documents/GitHub/AQUACOLOR" target="_blank" class="folder-link">
+          🗂 Open GitHub Folder
+        </a>
+      `;
+    });
+
+    function addToProjects() {
+      const beforeName = document.getElementById('beforeName').value.trim();
+      const afterName = document.getElementById('afterName').value.trim();
+
+      if (!beforeName || !afterName) {
+        alert("Please enter both filenames.");
+        return;
+      }
+
+      projects.push({ before: beforeName, after: afterName });
+
+      const json = JSON.stringify(projects, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.getElementById('downloadLink');
+      link.href = url;
+      link.download = "images.json";
+      link.textContent = "⬇️ Download Updated images.json";
+
+      alert("✅ JSON updated. Click the download link and move it to your GitHub folder:\nC:\\Users\\tokol\\OneDrive\\Documents\\GitHub\\AQUACOLOR");
+    }
+  </script>
+</body>
+</html>
