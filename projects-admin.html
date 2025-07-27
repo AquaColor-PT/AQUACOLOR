@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Admin - AquaColor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: #f0fdf4;
+      color: #2e7d32;
+    }
+    h1 {
+      color: #2e7d32;
+    }
+    .project-form, .project-list {
+      margin-top: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    input {
+      padding: 8px;
+      margin: 8px;
+      width: calc(100% - 40px);
+      font-size: 16px;
+    }
+    button {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      margin: 10px 0;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .project {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .project img {
+      height: 60px;
+      border-radius: 8px;
+    }
+    .project-info {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Project Admin Panel</h1>
+  <p><a href="index.html">← Back to Home</a></p>
+
+  <div class="project-form">
+    <h2>Add New Project</h2>
+    <input type="text" id="name" placeholder="Project Name" /><br>
+    <input type="text" id="before" placeholder="Before Image Filename (e.g. project5_before.jpg)" /><br>
+    <input type="text" id="after" placeholder="After Image Filename (e.g. project5_after.jpg)" /><br>
+    <button onclick="addProject()">Add Project</button>
+  </div>
+
+  <div class="project-list">
+    <h2>Current Projects</h2>
+    <div id="projects"></div>
+  </div>
+
+  <script>
+    let projectData = [];
+
+    function loadProjects() {
+      fetch('projects.json')
+        .then(res => res.json())
+        .then(data => {
+          projectData = data;
+          renderProjects();
+        });
+    }
+
+    function renderProjects() {
+      const container = document.getElementById('projects');
+      container.innerHTML = '';
+      projectData.forEach((p, index) => {
+        const div = document.createElement('div');
+        div.className = 'project';
+        div.innerHTML = `
+          <img src="${p.before}" alt="Before">
+          <img src="${p.after}" alt="After">
+          <div class="project-info">
+            <strong>${p.name}</strong>
+          </div>
+          <button onclick="deleteProject(${index})">Delete</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addProject() {
+      const name = document.getElementById('name').value;
+      const before = document.getElementById('before').value;
+      const after = document.getElementById('after').value;
+      if (!name || !before || !after) return alert('All fields required');
+      projectData.push({ name, before, after });
+      saveProjects();
+    }
+
+    function deleteProject(index) {
+      if (!confirm('Are you sure you want to delete this project?')) return;
+      projectData.splice(index, 1);
+      saveProjects();
+    }
+
+    function saveProjects() {
+      const json = JSON.stringify(projectData, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'projects.json';
+      link.click();
+      renderProjects();
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>
