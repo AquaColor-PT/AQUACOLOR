@@ -3,78 +3,254 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Our Projects - AquaColor</title>
+  <title>Directors Admin - AquaColor</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0; padding: 20px;
-      background: #f7f9fb;
-      color: #333;
+      background: #e0f2f1;
+      color: #2e7d32;
       max-width: 900px;
       margin-left: auto;
       margin-right: auto;
     }
-    h1 {
+    h1, h2 {
+      text-align: center;
       color: #2e7d32;
     }
-    a {
-      color: #2e7d32;
-      text-decoration: none;
+    .login-section, .admin-section {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
       font-weight: 600;
     }
-    .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
+    input[type=text], textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button {
+      margin-top: 15px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    button:hover {
+      background-color: #276129;
+    }
+    .director-list {
+      margin-top: 20px;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+    }
+    .director-item {
+      border: 1px solid #aaa;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background: #f7f9fb;
+    }
+    .director-item > div {
+      margin-bottom: 6px;
+    }
+    .director-item button {
+      background-color: #e53935;
+      margin-left: 5px;
+    }
+    #json-output {
+      white-space: pre-wrap;
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 14px;
       margin-top: 20px;
     }
-    .project {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    #copy-btn {
+      background-color: #388e3c;
+      margin-top: 10px;
+      width: 100%;
     }
-    .project img {
-      width: 200px;
-      border-radius: 10px;
-      margin-bottom: 5px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .hidden {
+      display: none;
+    }
+    .error {
+      color: #e53935;
+      font-weight: 600;
+      margin-top: 10px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h1>Our Projects</h1>
-  <p>See a few of our before and after results!</p>
-  <p><a href="index.html">← Back to Home</a></p>
 
-  <div class="gallery" id="gallery"></div>
+  <h1>Directors Admin Panel</h1>
 
-  <script>
-    fetch('images.json')
-      .then(response => response.json())
-      .then(projects => {
-        const gallery = document.getElementById('gallery');
-        projects.forEach(project => {
-          const div = document.createElement('div');
-          div.className = 'project';
-          
-          const beforeImg = document.createElement('img');
-          beforeImg.src = project.before;
-          beforeImg.alt = "Before";
+  <section class="login-section" id="login-section">
+    <h2>Login</h2>
+    <label for="password">Enter password:</label>
+    <input type="password" id="password" />
+    <button id="login-btn">Login</button>
+    <p class="error hidden" id="login-error">Incorrect password. Try again.</p>
+  </section>
 
-          const afterImg = document.createElement('img');
-          afterImg.src = project.after;
-          afterImg.alt = "After";
+  <section class="admin-section hidden" id="admin-section">
+    <h2>Manage Directors</h2>
 
-          div.appendChild(beforeImg);
-          div.appendChild(afterImg);
-          gallery.appendChild(div);
-        });
-      })
-      .catch(error => {
-        console.error('Could not load images.json:', error);
-        document.getElementById('gallery').innerHTML = "<p>Could not load project images.</p>";
-      });
-  </script>
+    <form id="director-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required />
+
+      <label for="role">Role:</label>
+      <input type="text" id="role" required />
+
+      <label for="bio">Bio:</label>
+      <textarea id="bio" rows="3" required></textarea>
+
+      <label for="image">Image filename (e.g. director1.png):</label>
+      <input type="text" id="image" required />
+
+      <button type="submit">Add / Update Director</button>
+    </form>
+
+    <div class="director-list" id="director-list"></div>
+
+    <h2>Updated JSON Data</h2>
+    <div id="json-output"></div>
+    <button id="copy-btn">Copy JSON to Clipboard</button>
+  </section>
+
+<script>
+  const PASSWORD = "aquacolor123"; // Change this password as you like, keep it secret
+
+  const loginSection = document.getElementById('login-section');
+  const adminSection = document.getElementById('admin-section');
+  const loginBtn = document.getElementById('login-btn');
+  const passwordInput = document.getElementById('password');
+  const loginError = document.getElementById('login-error');
+
+  const directorForm = document.getElementById('director-form');
+  const directorList = document.getElementById('director-list');
+  const jsonOutput = document.getElementById('json-output');
+  const copyBtn = document.getElementById('copy-btn');
+
+  let directors = [];
+
+  // Login function
+  loginBtn.addEventListener('click', () => {
+    if(passwordInput.value === PASSWORD){
+      loginSection.classList.add('hidden');
+      adminSection.classList.remove('hidden');
+      loadDirectors();
+    } else {
+      loginError.classList.remove('hidden');
+    }
+  });
+
+  // Load directors from JSON file
+  async function loadDirectors(){
+    try {
+      const response = await fetch('directors.json');
+      if(!response.ok) throw new Error("Could not load directors.json");
+      directors = await response.json();
+      renderDirectors();
+      updateJsonOutput();
+    } catch(err) {
+      directorList.innerHTML = "<p style='color:#e53935;'>Failed to load directors.json. Make sure the file exists.</p>";
+      jsonOutput.textContent = '';
+    }
+  }
+
+  // Render directors list
+  function renderDirectors(){
+    directorList.innerHTML = '';
+    directors.forEach((dir, idx) => {
+      const div = document.createElement('div');
+      div.className = 'director-item';
+      div.innerHTML = `
+        <div><strong>Name:</strong> ${dir.name}</div>
+        <div><strong>Role:</strong> ${dir.role}</div>
+        <div><strong>Bio:</strong> ${dir.bio}</div>
+        <div><strong>Image:</strong> ${dir.image}</div>
+        <button onclick="editDirector(${idx})">Edit</button>
+        <button onclick="removeDirector(${idx})">Remove</button>
+      `;
+      directorList.appendChild(div);
+    });
+  }
+
+  // Add or update director
+  directorForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const role = document.getElementById('role').value.trim();
+    const bio = document.getElementById('bio').value.trim();
+    const image = document.getElementById('image').value.trim();
+
+    if(!name || !role || !bio || !image) return;
+
+    // Check if updating existing director by name (case insensitive)
+    const existingIndex = directors.findIndex(d => d.name.toLowerCase() === name.toLowerCase());
+    if(existingIndex !== -1){
+      directors[existingIndex] = {name, role, bio, image};
+    } else {
+      directors.push({name, role, bio, image});
+    }
+
+    directorForm.reset();
+    renderDirectors();
+    updateJsonOutput();
+  });
+
+  // Edit director - fill form with data
+  function editDirector(index){
+    const dir = directors[index];
+    document.getElementById('name').value = dir.name;
+    document.getElementById('role').value = dir.role;
+    document.getElementById('bio').value = dir.bio;
+    document.getElementById('image').value = dir.image;
+  }
+
+  // Remove director
+  function removeDirector(index){
+    if(confirm('Remove this director?')){
+      directors.splice(index, 1);
+      renderDirectors();
+      updateJsonOutput();
+    }
+  }
+
+  // Update JSON output area
+  function updateJsonOutput(){
+    jsonOutput.textContent = JSON.stringify(directors, null, 2);
+  }
+
+  // Copy JSON to clipboard
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(jsonOutput.textContent).then(() => {
+      alert('JSON copied to clipboard! Now update directors.json on GitHub.');
+    });
+  });
+</script>
+
 </body>
 </html>
