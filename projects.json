@@ -1,10 +1,11 @@
-
- [
+[
   {
-    "name": "COMING SOON",
+    "name": "Coming Soon",
     "before": "p1.jpg",
-    "after": "p2.jpg"
+    "after": "p2.jpg",
+    "description": "."
   }
 ]
+
 
 
