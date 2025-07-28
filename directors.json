@@ -3,12 +3,13 @@
     "image": "director1.jpg",
     "name": "LONDY PHUMZILE",
     "role": "Founding Director",
-    "bio" :
+    "bio": "Londy is the visionary behind AquaColor, bringing strong leadership and a passion for creative expression."
   },
   {
     "image": "director2.jpg",
     "name": "TOKOLLO SIMBINI",
     "role": "Embedded Engineer/Director",
-     "bio":
+    "bio": "Tokollo leads the digital and technical direction of AquaColor, ensuring innovation meets customer needs."
   }
 ]
+
