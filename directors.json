@@ -2,13 +2,13 @@
   {
     "image": "director1.jpg",
     "name": "LONDY PHUMZILE",
-    "role": "Manager",
-    "bio": ""
+    "role": "Founding Director",
+   
   },
   {
     "image": "director2.jpg",
     "name": "TOKOLLO SIMBINI",
-    "role": "Assistant Mananger",
-    "bio": ""
+    "role": "Embedded Engineer/Director",
+ 
   }
 ]
