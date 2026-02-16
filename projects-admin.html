@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects Admin - AquaColor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      max-width: 700px;
+      margin: 20px auto;
+      background: #f7f9fb;
+      color: #333;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      color: #2e7d32;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #2e7d32;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #1b4d21;
+    }
+    #projects-list {
+      margin-top: 30px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      background: white;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .project-entry {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      align-items: center;
+    }
+    .project-entry:last-child {
+      border-bottom: none;
+    }
+    .project-entry span {
+      flex: 1;
+    }
+    .remove-btn {
+      background: #c62828;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+      font-weight: 600;
+    }
+    #json-output {
+      margin-top: 20px;
+      width: 100%;
+      height: 150px;
+      border-radius: 8px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      background: #eef5ee;
+      resize: none;
+    }
+    #copy-json-btn {
+      margin-top: 10px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #copy-json-btn:hover {
+      background-color: #1b4d21;
+    }
+  </style>
+</head>
+<body>
+  <h1>Projects Admin Panel</h1>
+
+  <label for="project-name">Project Name</label>
+  <input type="text" id="project-name" placeholder="E.g. Living Room Makeover" />
+
+  <label for="before-img">Before Image Filename</label>
+  <input type="text" id="before-img" placeholder="E.g. project1-before.jpg" />
+
+  <label for="after-img">After Image Filename</label>
+  <input type="text" id="after-img" placeholder="E.g. project1-after.jpg" />
+
+  <button id="add-project-btn">Add Project</button>
+
+  <div id="projects-list">
+    <p>No projects added yet.</p>
+  </div>
+
+  <label for="json-output">Generated projects.json content</label>
+  <textarea id="json-output" readonly placeholder="JSON output will appear here..."></textarea>
+  <button id="copy-json-btn">Copy JSON to Clipboard</button>
+
+<script>
+  const projectNameInput = document.getElementById('project-name');
+  const beforeImgInput = document.getElementById('before-img');
+  const afterImgInput = document.getElementById('after-img');
+  const addProjectBtn = document.getElementById('add-project-btn');
+  const projectsList = document.getElementById('projects-list');
+  const jsonOutput = document.getElementById('json-output');
+  const copyJsonBtn = document.getElementById('copy-json-btn');
+
+  let projects = [];
+
+  function updateProjectsList() {
+    if (projects.length === 0) {
+      projectsList.innerHTML = '<p>No projects added yet.</p>';
+      jsonOutput.value = '';
+      return;
+    }
+    projectsList.innerHTML = '';
+    projects.forEach((proj, index) => {
+      const div = document.createElement('div');
+      div.className = 'project-entry';
+      div.innerHTML = `
+        <span><strong>${proj.name}</strong> - Before: ${proj.before} | After: ${proj.after}</span>
+        <button class="remove-btn" data-index="${index}">Remove</button>
+      `;
+      projectsList.appendChild(div);
+    });
+    jsonOutput.value = JSON.stringify(projects, null, 2);
+  }
+
+  addProjectBtn.addEventListener('click', () => {
+    const name = projectNameInput.value.trim();
+    const before = beforeImgInput.value.trim();
+    const after = afterImgInput.value.trim();
+
+    if (!name || !before || !after) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    projects.push({ name, before, after });
+
+    projectNameInput.value = '';
+    beforeImgInput.value = '';
+    afterImgInput.value = '';
+    projectNameInput.focus();
+
+    updateProjectsList();
+  });
+
+  projectsList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-btn')) {
+      const index = e.target.getAttribute('data-index');
+      projects.splice(index, 1);
+      updateProjectsList();
+    }
+  });
+
+  copyJsonBtn.addEventListener('click', () => {
+    if (!jsonOutput.value) {
+      alert('No JSON to copy!');
+      return;
+    }
+    jsonOutput.select();
+    jsonOutput.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(jsonOutput.value)
+      .then(() => alert('JSON copied to clipboard!'))
+      .catch(() => alert('Failed to copy JSON.'));
+  });
+
+  // Initialize
+  updateProjectsList();
+</script>
+
+</body>
+</html>
