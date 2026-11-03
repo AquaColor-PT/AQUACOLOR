@@ -1,263 +1,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        
- <meta charset="UTF-8" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AquaColor - Painting Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --green-dark: #2e7d32;
+    --green: #43a047;
+    --green-light: #e0f2f1;
+    --bg: #f7f9fb;
+    --text: #2b3a2c;
+    --muted: #5f6f61;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(46, 125, 50, 0.12);
+  }
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AquaColor - Painting Services</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f7f9fb;
-      color: #333;
-    }
-    header {
-      background: #2e7d32;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    .logo-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .logo-container img {
-      max-height: 100px;
-      width: auto;
-    }
-    nav {
-      background: #43a047;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 10px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    section {
-      padding: 40px 20px;
-      max-width: 900px;
-      margin: auto;
-    }
-    h2 {
-      color: #2e7d32;
-    }
-    ul {
-      padding-left: 20px;
-    }
-    footer {
-      background: #2e7d32;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    .contact {
-      background: #e0f2f1;
-      padding: 20px;
-      border-radius: 10px;
-    }
-    .directors-section {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
-    .director-card {
-      display: flex;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  a { color: inherit; }
+
+  /* ---------- Header / Nav ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(46, 125, 50, 0.12);
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .brand img { height: 44px; width: auto; }
+  .brand span {
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    color: var(--green-dark);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: var(--text);
+    transition: background 0.25s, color 0.25s;
+  }
+  .nav-links a:hover { background: var(--green-light); color: var(--green-dark); }
+  .nav-links a.cta {
+    background: var(--green-dark);
+    color: #fff;
+  }
+  .nav-links a.cta:hover { background: var(--green); color: #fff; }
+
+  #menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--green-dark);
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background:
+      radial-gradient(circle at 85% 20%, rgba(255,255,255,0.18), transparent 45%),
+      linear-gradient(135deg, var(--green-dark), var(--green));
+    color: #fff;
+    text-align: center;
+    padding: 110px 24px 130px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 60px;
+    background: var(--bg);
+    clip-path: ellipse(60% 100% at 50% 100%);
+  }
+  .hero-inner { max-width: 760px; margin: auto; position: relative; z-index: 1; }
+  .hero img { max-height: 110px; width: auto; margin-bottom: 20px; }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1.15;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    font-weight: 300;
+    margin: 16px 0 32px;
+    opacity: 0.95;
+  }
+  .btn {
+    display: inline-block;
+    padding: 13px 30px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  .btn:hover { transform: translateY(-3px); }
+  .btn-light { background: #fff; color: var(--green-dark); box-shadow: 0 8px 20px rgba(0,0,0,0.18); }
+  .btn-outline { border: 2px solid rgba(255,255,255,0.8); color: #fff; margin-left: 10px; }
+  .btn-outline:hover { background: rgba(255,255,255,0.15); }
+  .btn-green { background: var(--green-dark); color: #fff; box-shadow: var(--shadow); }
+  .btn-green:hover { background: var(--green); }
+
+  /* ---------- Sections ---------- */
+  section { padding: 70px 24px; }
+  .wrap { max-width: 1100px; margin: auto; }
+  .section-title { text-align: center; margin-bottom: 40px; }
+  .section-title h2 {
+    font-size: clamp(1.7rem, 4vw, 2.3rem);
+    color: var(--green-dark);
+    font-weight: 700;
+  }
+  .section-title .bar {
+    width: 60px;
+    height: 4px;
+    background: var(--green);
+    border-radius: 4px;
+    margin: 12px auto 0;
+  }
+
+  /* About */
+  #about p {
+    max-width: 780px;
+    margin: auto;
+    text-align: center;
+    font-size: 1.05rem;
+    color: var(--muted);
+  }
+
+  /* Service cards */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px;
+  }
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(46, 125, 50, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(46, 125, 50, 0.2);
+  }
+  .card .icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: var(--green-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 14px;
+  }
+  .card h3 { font-size: 1.05rem; color: var(--green-dark); font-weight: 600; }
+
+  .subheading {
+    text-align: center;
+    color: var(--green-dark);
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin: 55px 0 25px;
+  }
+
+  #services { background: linear-gradient(180deg, var(--bg), #fff); }
+
+  /* Directors + contact */
+  #team { background: var(--green-light); }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    align-items: start;
+  }
+  .director-card {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+  .director-card img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 16px;
+    flex-shrink: 0;
+  }
+  .director-info h3 { color: var(--green-dark); font-size: 1.1rem; }
+  .director-info p { font-size: 0.92rem; color: var(--muted); }
+
+  .contact-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow);
+  }
+  .contact-card h3 { color: var(--green-dark); margin-bottom: 14px; font-size: 1.3rem; }
+  .contact-card p { margin-bottom: 8px; font-size: 0.97rem; }
+  .contact-card a { color: var(--green-dark); font-weight: 500; text-decoration: none; }
+  .contact-card a:hover { text-decoration: underline; }
+  .contact-card .btn { margin-top: 16px; color: #fff; }
+  .contact-card .btn:hover { text-decoration: none; }
+
+  /* Form */
+  #message-form { background: var(--bg); }
+  form.msg {
+    max-width: 560px;
+    margin: auto;
+    background: #fff;
+    padding: 34px 30px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  form.msg input, form.msg textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #d5ddd6;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: #fbfcfb;
+    transition: border 0.25s, box-shadow 0.25s;
+  }
+  form.msg input:focus, form.msg textarea:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px rgba(67, 160, 71, 0.15);
+  }
+
+  /* Footer */
+  footer {
+    background: var(--green-dark);
+    color: #fff;
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.92rem;
+  }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.show { opacity: 1; transform: none; }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 760px) {
+    #menu-btn { display: block; }
+    .nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      background: #fff;
       flex-direction: column;
-      align-items: flex-start;
-      margin-bottom: 30px;
+      align-items: stretch;
+      padding: 12px 20px 20px;
+      gap: 4px;
+      box-shadow: 0 14px 24px rgba(0,0,0,0.08);
+      display: none;
     }
-    .director-card img {
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .director-info {
-      margin-top: 10px;
-      text-align: left;
-    }
-    #projects {
-      margin-top: 40px;
-    }
-    .project-card {
-      display: inline-block;
-      margin: 10px;
-      text-align: center;
-    }
-    .project-card img {
-      width: 200px;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-    /* Hamburger styles */
-    #hamburger-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 1000;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 28px;
-      color: #273b28ff;
-    }
-    #side-panel {
-      position: fixed;
-      top: 0;
-      left: -250px;
-      width: 250px;
-      height: 100%;
-      background: #2e7d32;
-      color: white;
-      padding: 20px;
-      box-sizing: border-box;
-      transition: left 0.3s ease;
-      z-index: 999;
-    }
-    #side-panel button#close-panel {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
-    #side-panel ul {
-      list-style: none;
-      padding: 0;
-    }
-    #side-panel ul li {
-      margin-bottom: 15px;
-    }
-    #side-panel ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-    }
-  </style>
+    .nav-links.open { display: flex; }
+    .nav-links a { display: block; text-align: center; }
+    .btn-outline { margin: 12px 0 0; }
+    .director-card { flex-direction: column; }
+    section { padding: 55px 20px; }
+  }
+</style>
 </head>
 <body>
 
-<header>
-  <div class="logo-container">
-    <img src="logo.png" alt="AquaColor Logo" />
-    <div>
-      <h1>AQUACOLOR</h1>
-      <p>Professional Painting Services</p>
-    </div>
+<!-- Header -->
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <img src="logo.png" alt="AquaColor Logo" />
+      <span>AQUACOLOR</span>
+    </a>
+    <button id="menu-btn" aria-label="Open menu">&#9776;</button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="projects.html">Our Projects</a></li>
+      <li><a href="join-team.html">Join Our Team</a></li>
+      <li><a href="#contact" class="cta">Contact Us</a></li>
+    </ul>
   </div>
 </header>
 
-<!-- Hamburger icon -->
-<button id="hamburger-btn" aria-label="Open menu">&#9776;</button>
-
-<!-- Side panel -->
-<div id="side-panel" aria-hidden="true">
-  <button id="close-panel" aria-label="Close menu">×</button>
-  <h2>Menu</h2>
-  <ul>
-    <li><a href="join-team.html">Join Our Team</a></li>
-    <li><a href="projects.html">Our Projects</a></li>
-  </ul>
+<!-- Hero -->
+<div class="hero" id="top">
+  <div class="hero-inner">
+    <img src="logo.png" alt="AquaColor Logo" />
+    <h1>AQUACOLOR</h1>
+    <p>Professional Painting Services that bring your space to life.</p>
+    <a href="#contact" class="btn btn-light">Get a Free Quote</a>
+    <a href="projects.html" class="btn btn-outline">See Our Work</a>
+  </div>
 </div>
 
-<nav>
-  <a href="#about">About Us</a>
-  <a href="#services">Services</a>
-  <a href="#contact">Contact Us</a>
-</nav>
-
+<!-- About -->
 <section id="about">
-  <h2>About Us</h2>
-  <p>AQUACOLOR is a family-run painting company. We are passionate about delivering high-quality painting solutions that bring life to your home or business. From colorful accent walls to full property makeovers, we specialize in making your vision come to life with professionalism, precision, and care. Trust AquaColor for vibrant, lasting impressions and a service that feels like family.</p>
-</section>
-
-<section id="services">
-  <h2>Our Services</h2>
-  <ul>
-    <li>Interior Painting</li>
-    <li>Exterior Painting</li>
-    <li>Roof Painting</li>
-    <li>Accent Walls & Decorative Finishes</li>
-    <li>Colour Selection Advice</li>
-    <li>Touch-Ups & Paint Maintenance</li>
-    <li>Basic Waterproofing Services</li>
-  </ul>
-         <h2>Our Services (Extended)</h2>
-  <ul>
-    <li>Embedded c circuit designs and consultations</li>
-    <li>Electrical system maintanance</li>
-    <li>home electric wiring</li>
-  </ul>
-</section>
-
-<section class="directors-section">
-  <h2>Meet Our Directors & Contact Us</h2>
-  <div style="display: flex; flex-wrap: wrap; gap: 40px;">
-    <div style="flex: 1; min-width: 250px;">
-      <div id="director-list">Loading...</div>
+  <div class="wrap reveal">
+    <div class="section-title">
+      <h2>About Us</h2>
+      <div class="bar"></div>
     </div>
-    <div id="contact" style="flex: 1; min-width: 250px; background-color: #ffffff; padding: 20px; border-radius: 10px; border: 1px solid #dddddd;">
-      <h3 style="color: #2e7d32; font-size: 20px; margin-bottom: 15px;">Contact Us</h3>
-      <p><strong>Phone:</strong> 076 500 6229 / 073 188 7519</p>
-      <p><strong>Email:</strong> <a href="mailto:enquire@aquacolor.org" style="color: #2e7d32; text-decoration: none;">enquire@aquacolor.org</a></p>
-      <p><strong>Location:</strong> Diepsloot, Johannesburg</p>
-      <p><strong>Message Us:</strong> <a href="#contact" style="color: #2e7d32; text-decoration: none;">Use the form below</a></p>
-      <a href="https://wa.me/+27765006229" target="_blank" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color:#2e7d32; color: white; text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 14px;">💬 Chat on WhatsApp</a>
+    <p>AQUACOLOR is a family-run painting company. We are passionate about delivering high-quality painting solutions that bring life to your home or business. From colorful accent walls to full property makeovers, we specialize in making your vision come to life with professionalism, precision, and care. Trust AquaColor for vibrant, lasting impressions and a service that feels like family.</p>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-title reveal">
+      <h2>Our Services</h2>
+      <div class="bar"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card reveal"><div class="icon">🏠</div><h3>Interior Painting</h3></div>
+      <div class="card reveal"><div class="icon">🎨</div><h3>Exterior Painting</h3></div>
+      <div class="card reveal"><div class="icon">🏗️</div><h3>Roof Painting</h3></div>
+      <div class="card reveal"><div class="icon">✨</div><h3>Accent Walls &amp; Decorative Finishes</h3></div>
+      <div class="card reveal"><div class="icon">🌈</div><h3>Colour Selection Advice</h3></div>
+      <div class="card reveal"><div class="icon">🖌️</div><h3>Touch-Ups &amp; Paint Maintenance</h3></div>
+      <div class="card reveal"><div class="icon">💧</div><h3>Basic Waterproofing Services</h3></div>
+    </div>
+
+    <h3 class="subheading reveal">Our Services (Extended)</h3>
+
+    <div class="grid">
+      <div class="card reveal"><div class="icon">🔌</div><h3>Embedded C circuit designs and consultations</h3></div>
+      <div class="card reveal"><div class="icon">⚡</div><h3>Electrical system maintenance</h3></div>
+      <div class="card reveal"><div class="icon">💡</div><h3>Home electric wiring</h3></div>
     </div>
   </div>
 </section>
 
+<!-- Directors + Contact -->
+<section id="team">
+  <div class="wrap">
+    <div class="section-title reveal">
+      <h2>Meet Our Directors &amp; Contact Us</h2>
+      <div class="bar"></div>
+    </div>
 
+    <div class="team-grid">
+      <div id="director-list" class="reveal">Loading...</div>
 
-<section class="contact" style="padding: 20px; background-color: #f9f9f9;">
-  <h2 style="color: #2e7d32; text-align: center;">Send Us a Message</h2>
-  <form action="https://formsubmit.co/enquire@aquacolor.org" method="POST" target="_blank" style="max-width: 500px; margin: auto; display: flex; flex-direction: column; gap: 15px;">
-    
-    <!-- Redirect after submission -->
-    <input type="hidden" name="_next" value="https://www.aquacolor.org/thank-you.html">
-    
-    <!-- Disable CAPTCHA -->
-    <input type="hidden" name="_captcha" value="false">
-
-    <!-- Optional subject line -->
-    <input type="hidden" name="_subject" value="New message from AquaColor website">
-
-    <!-- Optional autoresponse -->
-    <input type="hidden" name="_autoresponse" value="Thank you for reaching out to AquaColor! We’ll get back to you soon.">
-
-    <input type="text" name="name" placeholder="Your Name" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-
-    <input type="email" name="email" placeholder="Your Email" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-
-    <textarea name="message" placeholder="Your Message" rows="5" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
-
-    <button type="submit" style="padding: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
-      Send Message
-    </button>
-  </form>
+      <div id="contact" class="contact-card reveal">
+        <h3>Contact Us</h3>
+        <p><strong>Phone:</strong> 076 500 6229 / 073 188 7519</p>
+        <p><strong>Email:</strong> <a href="mailto:enquire@aquacolor.org">enquire@aquacolor.org</a></p>
+        <p><strong>Location:</strong> Diepsloot, Johannesburg</p>
+        <p><strong>Message Us:</strong> <a href="#message-form">Use the form below</a></p>
+        <a href="https://wa.me/+27765006229" target="_blank" rel="noopener" class="btn btn-green">💬 Chat on WhatsApp</a>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- Message form -->
+<section id="message-form">
+  <div class="wrap reveal">
+    <div class="section-title">
+      <h2>Send Us a Message</h2>
+      <div class="bar"></div>
+    </div>
 
+    <form class="msg" action="https://formsubmit.co/enquire@aquacolor.org" method="POST" target="_blank">
+      <input type="hidden" name="_next" value="https://www.aquacolor.org/thank-you.html">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_subject" value="New message from AquaColor website">
+      <input type="hidden" name="_autoresponse" value="Thank you for reaching out to AquaColor! We’ll get back to you soon.">
+
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+
+      <button type="submit" class="btn btn-green">Send Message</button>
+    </form>
+  </div>
+</section>
 
 <footer>
   <p>&copy; 2025 AQUACOLOR. All rights reserved.</p>
 </footer>
 
 <script>
+  // Load directors
   async function loadDirectors() {
     const directorList = document.getElementById("director-list");
     try {
@@ -287,55 +469,27 @@
       console.error(error);
     }
   }
+  loadDirectors();
 
-  async function loadProjects() {
-    const gallery = document.getElementById("project-gallery");
-    try {
-      const res = await fetch("projects.json");
-      const projects = await res.json();
-      gallery.innerHTML = "";
-      projects.forEach(proj => {
-        const card = document.createElement("div");
-        card.className = "project-card";
-        card.innerHTML = `
-          <div><strong>${proj.name}</strong></div>
-          <img src="${proj.before}" alt="Before ${proj.name}" /><br>
-          <img src="${proj.after}" alt="After ${proj.name}" />
-        `;
-        gallery.appendChild(card);
-      });
-    } catch (err) {
-      gallery.innerHTML = "<p>Could not load project images.</p>";
-    }
-  }
+  // Mobile menu
+  const menuBtn = document.getElementById('menu-btn');
+  const navLinks = document.getElementById('nav-links');
+  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => navLinks.classList.remove('open'))
+  );
 
-  window.onload = () => {
-    loadDirectors();
-    loadProjects();
-  };
-
-  const hamburgerBtn = document.getElementById('hamburger-btn');
-  const sidePanel = document.getElementById('side-panel');
-  const closePanelBtn = document.getElementById('close-panel');
-
-  hamburgerBtn.addEventListener('click', () => {
-    sidePanel.style.left = '0';
-    sidePanel.setAttribute('aria-hidden', 'false');
-  });
-
-  closePanelBtn.addEventListener('click', () => {
-    sidePanel.style.left = '-250px';
-    sidePanel.setAttribute('aria-hidden', 'true');
-  });
-
-  window.addEventListener('click', (e) => {
-    if (!sidePanel.contains(e.target) && e.target !== hamburgerBtn) {
-      sidePanel.style.left = '-250px';
-      sidePanel.setAttribute('aria-hidden', 'true');
-    }
-  });
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
 </body>
 </html>
-
