@@ -1,413 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AquaColor - Painting & Electrical Services</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AquaColor - Paint, Power, Solar &amp; Projects</title>
+<meta name="description" content="AquaColor: painting, electrical work, solar installation assistance, project management assistance and website creation in Johannesburg.">
+<link rel="icon" href="logo-icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green-dark: #2e7d32;
-    --green: #43a047;
-    --green-light: #e0f2f1;
-    --bg: #f7f9fb;
-    --surface: #ffffff;
-    --text: #1f2d20;
-    --muted: #5f6f61;
-    --border: rgba(46,125,50,0.14);
-    --radius: 20px;
-    --shadow: 0 12px 34px rgba(46,125,50,0.13);
+    --g-dark:#2e7d32; --g:#43a047; --g-light:#e0f2f1; --sun:#fbc02d;
+    --bg:#f7f9fb; --surface:#fff; --text:#1f2d20; --muted:#5f6f61;
+    --border:rgba(46,125,50,.14); --radius:20px; --shadow:0 12px 34px rgba(46,125,50,.13);
   }
   [data-theme="dark"] {
-    --bg: #0e1510;
-    --surface: #16201a;
-    --text: #e8f1e9;
-    --muted: #9db3a0;
-    --green-light: #1b2b20;
-    --border: rgba(120,200,125,0.18);
-    --shadow: 0 12px 34px rgba(0,0,0,0.45);
+    --bg:#0e1510; --surface:#16201a; --text:#e8f1e9; --muted:#9db3a0;
+    --g-light:#1b2b20; --border:rgba(120,200,125,.18); --shadow:0 12px 34px rgba(0,0,0,.45);
   }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; scroll-padding-top:80px; }
+  body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; transition:background .3s,color .3s; }
+  a { color:inherit; }
+  img { max-width:100%; }
+  .wrap { max-width:1150px; margin:auto; }
+  section { padding:80px 24px; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    transition: background 0.3s, color 0.3s;
-  }
-  a { color: inherit; }
-  img { max-width: 100%; }
+  /* Header */
+  header { position:sticky; top:0; z-index:100; background:color-mix(in srgb,var(--surface) 85%,transparent); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+  .nav { max-width:1150px; margin:auto; padding:10px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:800; letter-spacing:1.5px; font-size:1.15rem; color:var(--g-dark); }
+  .brand img { height:44px; }
+  [data-theme="dark"] .brand { color:var(--g); }
+  .links { display:flex; align-items:center; gap:4px; list-style:none; }
+  .links a { text-decoration:none; font-weight:500; font-size:.93rem; padding:8px 14px; border-radius:999px; transition:.25s; }
+  .links a:hover { background:var(--g-light); color:var(--g-dark); }
+  .links a.cta { background:var(--g-dark); color:#fff; }
+  .links a.cta:hover { background:var(--g); }
+  .icon-btn { background:var(--g-light); border:none; cursor:pointer; width:40px; height:40px; border-radius:50%; font-size:1.1rem; }
+  #menuBtn { display:none; }
 
-  /* ---------- Nav ---------- */
-  .site-header {
-    position: sticky; top: 0; z-index: 100;
-    background: color-mix(in srgb, var(--surface) 82%, transparent);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-inner {
-    max-width: 1150px; margin: auto; padding: 10px 24px;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .brand img { height: 42px; width: auto; }
-  .brand span { font-weight: 800; letter-spacing: 1.5px; color: var(--green-dark); font-size: 1.15rem; }
-  [data-theme="dark"] .brand span { color: var(--green); }
-  .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
-  .nav-links a {
-    text-decoration: none; font-weight: 500; font-size: 0.93rem;
-    padding: 8px 14px; border-radius: 999px; transition: 0.25s;
-  }
-  .nav-links a:hover { background: var(--green-light); color: var(--green-dark); }
-  [data-theme="dark"] .nav-links a:hover { color: var(--green); }
-  .nav-links a.cta { background: var(--green-dark); color: #fff; }
-  .nav-links a.cta:hover { background: var(--green); color: #fff; }
-  .icon-btn {
-    background: var(--green-light); border: none; cursor: pointer;
-    width: 40px; height: 40px; border-radius: 50%; font-size: 1.1rem;
-    transition: transform 0.25s;
-  }
-  .icon-btn:hover { transform: rotate(20deg) scale(1.08); }
-  #menu-btn { display: none; }
+  /* Hero */
+  .hero { position:relative; overflow:hidden; color:#fff; padding:90px 24px 100px; background:linear-gradient(135deg,#1b5e20,var(--g-dark) 50%,var(--g)); }
+  .hero::before { content:""; position:absolute; width:380px; height:380px; border-radius:50%; background:var(--sun); opacity:.22; filter:blur(70px); top:-90px; right:-60px; }
+  .hero-in { position:relative; max-width:1150px; margin:auto; display:grid; grid-template-columns:1.25fr 1fr; gap:40px; align-items:center; }
+  .tag { display:inline-block; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); padding:6px 16px; border-radius:999px; font-size:.85rem; margin-bottom:18px; }
+  .hero h1 { font-size:clamp(2.2rem,5.5vw,3.8rem); line-height:1.12; font-weight:800; }
+  .hero h1 span { color:#fff3c4; }
+  .hero p { margin:18px 0 30px; font-weight:300; font-size:1.1rem; max-width:520px; }
+  .btn { display:inline-block; padding:13px 28px; border-radius:999px; font-weight:600; text-decoration:none; border:none; cursor:pointer; font-family:inherit; font-size:.98rem; transition:transform .25s,background .25s; }
+  .btn:hover { transform:translateY(-3px); }
+  .btn-light { background:#fff; color:var(--g-dark); box-shadow:0 8px 22px rgba(0,0,0,.2); }
+  .btn-out { border:2px solid rgba(255,255,255,.8); color:#fff; margin-left:10px; }
+  .btn-green { background:var(--g-dark); color:#fff; box-shadow:var(--shadow); }
+  .btn-green:hover { background:var(--g); }
+  .btn-wa { background:#25d366; color:#fff; }
+  .hero-card { background:rgba(255,255,255,.14); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.28); border-radius:26px; padding:34px; text-align:center; }
+  .hero-card img { width:150px; }
+  .hero-card ul { list-style:none; margin-top:14px; display:grid; gap:8px; font-weight:500; }
 
-  /* ---------- Hero ---------- */
-  .hero {
-    position: relative; overflow: hidden;
-    padding: 90px 24px 110px;
-    background: linear-gradient(135deg, #1b5e20, var(--green-dark) 45%, var(--green));
-    color: #fff;
-  }
-  .blob {
-    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.35;
-    animation: float 10s ease-in-out infinite;
-  }
-  .blob.b1 { width: 340px; height: 340px; background: #a5d6a7; top: -80px; right: -60px; }
-  .blob.b2 { width: 280px; height: 280px; background: #26a69a; bottom: -90px; left: -50px; animation-delay: -4s; }
-  @keyframes float { 50% { transform: translateY(30px) scale(1.08); } }
-  .hero-inner {
-    position: relative; z-index: 1; max-width: 1150px; margin: auto;
-    display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center;
-  }
-  .tag {
-    display: inline-block; background: rgba(255,255,255,0.18);
-    padding: 6px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 500;
-    margin-bottom: 18px; border: 1px solid rgba(255,255,255,0.3);
-  }
-  .hero h1 { font-size: clamp(2.3rem, 5.5vw, 3.9rem); line-height: 1.12; font-weight: 800; }
-  .hero h1 span { color: #c8e6c9; }
-  .hero p { margin: 18px 0 30px; font-weight: 300; font-size: 1.1rem; max-width: 520px; opacity: 0.95; }
-  .btn {
-    display: inline-block; padding: 13px 28px; border-radius: 999px; font-weight: 600;
-    text-decoration: none; border: none; cursor: pointer; font-family: inherit; font-size: 0.98rem;
-    transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
-  }
-  .btn:hover { transform: translateY(-3px); }
-  .btn-light { background: #fff; color: var(--green-dark); box-shadow: 0 8px 22px rgba(0,0,0,0.2); }
-  .btn-outline { border: 2px solid rgba(255,255,255,0.8); color: #fff; margin-left: 10px; }
-  .btn-outline:hover { background: rgba(255,255,255,0.15); }
-  .btn-green { background: var(--green-dark); color: #fff; box-shadow: var(--shadow); }
-  .btn-green:hover { background: var(--green); }
-  .btn-wa { background: #25d366; color: #fff; }
+  /* Titles */
+  .title { text-align:center; margin-bottom:40px; }
+  .title h2 { font-size:clamp(1.7rem,4vw,2.4rem); color:var(--g-dark); font-weight:700; }
+  [data-theme="dark"] .title h2 { color:var(--g); }
+  .title p { color:var(--muted); max-width:600px; margin:8px auto 0; }
+  .title .bar { width:60px; height:4px; background:linear-gradient(90deg,var(--g),var(--sun)); border-radius:4px; margin:12px auto 0; }
+  .lead { max-width:800px; margin:auto; text-align:center; color:var(--muted); font-size:1.07rem; }
 
-  .hero-card {
-    background: rgba(255,255,255,0.14); backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.28); border-radius: 26px; padding: 30px;
-    text-align: center;
-  }
-  .hero-card img { max-height: 120px; margin-bottom: 14px; }
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
-  .stat b { display: block; font-size: 2rem; font-weight: 800; }
-  .stat small { font-size: 0.78rem; opacity: 0.9; line-height: 1.3; display: block; }
+  /* Services */
+  .tabs { display:flex; justify-content:center; gap:10px; margin-bottom:34px; flex-wrap:wrap; }
+  .tab { padding:10px 22px; border-radius:999px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-family:inherit; font-weight:500; cursor:pointer; transition:.25s; }
+  .tab.active, .tab:hover { background:var(--g-dark); color:#fff; border-color:var(--g-dark); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:22px; }
+  .card { background:var(--surface); border-radius:var(--radius); padding:26px 24px; box-shadow:var(--shadow); border:1px solid var(--border); transition:transform .3s; }
+  .card:hover { transform:translateY(-6px); }
+  .card.hide { display:none; }
+  .card .ico { width:52px; height:52px; border-radius:15px; background:var(--g-light); display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin-bottom:12px; }
+  .card h3 { font-size:1.02rem; font-weight:600; color:var(--g-dark); }
+  [data-theme="dark"] .card h3 { color:var(--g); }
+  .card p { font-size:.9rem; color:var(--muted); margin-top:4px; }
+  .card.new::after { content:"NEW"; float:right; margin-top:-70px; background:var(--sun); color:#3b2f00; font-size:.68rem; font-weight:700; padding:2px 10px; border-radius:999px; }
 
-  /* ---------- Sections ---------- */
-  section { padding: 80px 24px; }
-  .wrap { max-width: 1150px; margin: auto; }
-  .section-title { text-align: center; margin-bottom: 40px; }
-  .section-title h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); color: var(--green-dark); font-weight: 700; }
-  [data-theme="dark"] .section-title h2 { color: var(--green); }
-  .section-title p { color: var(--muted); max-width: 600px; margin: 8px auto 0; }
-  .section-title .bar { width: 60px; height: 4px; background: var(--green); border-radius: 4px; margin: 12px auto 0; }
-
-  #about p.lead { max-width: 800px; margin: auto; text-align: center; font-size: 1.07rem; color: var(--muted); }
-
-  /* Tabs */
-  .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 34px; flex-wrap: wrap; }
-  .tab {
-    padding: 10px 24px; border-radius: 999px; border: 1px solid var(--border);
-    background: var(--surface); color: var(--text); font-family: inherit; font-weight: 500;
-    cursor: pointer; transition: 0.25s;
-  }
-  .tab.active, .tab:hover { background: var(--green-dark); color: #fff; border-color: var(--green-dark); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
-  .card {
-    background: var(--surface); border-radius: var(--radius); padding: 28px 24px;
-    box-shadow: var(--shadow); border: 1px solid var(--border);
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  .card:hover { transform: translateY(-6px); }
-  .card .icon {
-    width: 52px; height: 52px; border-radius: 15px; background: var(--green-light);
-    display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 14px;
-  }
-  .card h3 { font-size: 1.02rem; font-weight: 600; color: var(--green-dark); }
-  [data-theme="dark"] .card h3 { color: var(--green); }
-  .card.hide { display: none; }
-
-  /* Calculator */
-  #calc { background: var(--green-light); }
-  .calc-box {
-    max-width: 900px; margin: auto; background: var(--surface); border-radius: 26px;
-    box-shadow: var(--shadow); border: 1px solid var(--border);
-    display: grid; grid-template-columns: 1.2fr 1fr; overflow: hidden;
-  }
-  .calc-form { padding: 34px 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-content: start; }
-  .calc-form label { font-size: 0.85rem; font-weight: 500; color: var(--muted); display: block; margin-bottom: 4px; }
-  .calc-form input[type=number] {
-    width: 100%; padding: 11px 13px; border-radius: 12px; border: 1px solid var(--border);
-    background: var(--bg); color: var(--text); font-family: inherit; font-size: 1rem;
-  }
-  .calc-form input:focus, form.msg input:focus, form.msg textarea:focus {
-    outline: none; border-color: var(--green); box-shadow: 0 0 0 4px rgba(67,160,71,0.18);
-  }
-  .calc-form .full { grid-column: 1 / -1; }
-  .check { display: flex; align-items: center; gap: 8px; font-size: 0.92rem; }
-  .calc-result {
-    background: linear-gradient(160deg, var(--green-dark), var(--green)); color: #fff;
-    padding: 34px 28px; display: flex; flex-direction: column; justify-content: center; text-align: center;
-  }
-  .calc-result .big { font-size: 3.2rem; font-weight: 800; line-height: 1.1; }
-  .calc-result small { opacity: 0.9; display: block; margin-top: 10px; font-size: 0.82rem; }
-  .calc-result .btn { margin-top: 18px; }
+  /* Process */
+  #process { background:var(--g-light); }
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:22px; counter-reset:s; }
+  .step { background:var(--surface); border-radius:var(--radius); padding:26px 22px; box-shadow:var(--shadow); counter-increment:s; }
+  .step::before { content:counter(s); display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:var(--g-dark); color:#fff; font-weight:700; margin-bottom:12px; }
+  .step h3 { color:var(--g-dark); font-size:1.02rem; }
+  [data-theme="dark"] .step h3 { color:var(--g); }
+  .step p { font-size:.9rem; color:var(--muted); }
 
   /* Projects */
-  .proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; }
-  .proj {
-    background: var(--surface); border-radius: var(--radius); overflow: hidden;
-    box-shadow: var(--shadow); border: 1px solid var(--border);
-  }
-  .proj h3 { padding: 14px 20px; font-size: 1rem; color: var(--green-dark); }
-  [data-theme="dark"] .proj h3 { color: var(--green); }
-  .ba { position: relative; --pos: 50%; aspect-ratio: 4/3; overflow: hidden; user-select: none; }
-  .ba img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .ba .before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
-  .ba .line {
-    position: absolute; top: 0; bottom: 0; left: var(--pos); width: 3px; background: #fff;
-    transform: translateX(-50%); box-shadow: 0 0 10px rgba(0,0,0,0.4); pointer-events: none;
-  }
-  .ba .line::after {
-    content: "⇆"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 38px; height: 38px; border-radius: 50%; background: #fff; color: var(--green-dark);
-    display: flex; align-items: center; justify-content: center; font-weight: 700;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-  .ba input[type=range] {
-    position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0;
-  }
-  .ba .lbl {
-    position: absolute; bottom: 10px; padding: 3px 12px; border-radius: 999px;
-    background: rgba(0,0,0,0.55); color: #fff; font-size: 0.75rem; pointer-events: none;
-  }
-  .ba .lbl.l { left: 10px; } .ba .lbl.r { right: 10px; }
+  .proj-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:26px; }
+  .proj { background:var(--surface); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .proj h3 { padding:14px 20px; font-size:1rem; color:var(--g-dark); }
+  [data-theme="dark"] .proj h3 { color:var(--g); }
+  .ba { position:relative; --pos:50%; aspect-ratio:4/3; overflow:hidden; }
+  .ba img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .ba .before { clip-path:inset(0 calc(100% - var(--pos)) 0 0); }
+  .ba .line { position:absolute; top:0; bottom:0; left:var(--pos); width:3px; background:#fff; transform:translateX(-50%); box-shadow:0 0 10px rgba(0,0,0,.4); pointer-events:none; }
+  .ba .line::after { content:"⇆"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:38px; height:38px; border-radius:50%; background:#fff; color:var(--g-dark); display:flex; align-items:center; justify-content:center; font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,.3); }
+  .ba input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:ew-resize; margin:0; }
+  .ba .lbl { position:absolute; bottom:10px; padding:3px 12px; border-radius:999px; background:rgba(0,0,0,.55); color:#fff; font-size:.75rem; pointer-events:none; }
+  .lbl.l { left:10px; } .lbl.r { right:10px; }
 
   /* Team + contact */
-  #team { background: var(--green-light); }
-  .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; align-items: start; }
-  .director-card {
-    display: flex; gap: 20px; align-items: flex-start; background: var(--surface);
-    border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); margin-bottom: 20px;
-  }
-  .director-card img { width: 110px; height: 110px; object-fit: cover; border-radius: 16px; flex-shrink: 0; }
-  .director-info h3 { color: var(--green-dark); font-size: 1.1rem; }
-  [data-theme="dark"] .director-info h3 { color: var(--green); }
-  .director-info p { font-size: 0.92rem; color: var(--muted); }
-  .contact-card { background: var(--surface); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); }
-  .contact-card h3 { color: var(--green-dark); margin-bottom: 14px; font-size: 1.3rem; }
-  [data-theme="dark"] .contact-card h3 { color: var(--green); }
-  .contact-card p { margin-bottom: 8px; font-size: 0.96rem; }
-  .contact-card a:not(.btn) { color: var(--green-dark); font-weight: 500; text-decoration: none; }
-  [data-theme="dark"] .contact-card a:not(.btn) { color: var(--green); }
+  #team { background:var(--g-light); }
+  .two { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:30px; align-items:start; }
+  .director { display:flex; gap:20px; align-items:flex-start; background:var(--surface); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-bottom:20px; }
+  .director img { width:110px; height:110px; object-fit:cover; border-radius:16px; flex-shrink:0; }
+  .director h3 { color:var(--g-dark); font-size:1.1rem; }
+  [data-theme="dark"] .director h3 { color:var(--g); }
+  .director p { font-size:.92rem; color:var(--muted); }
+  .contact-card { background:var(--surface); border-radius:var(--radius); padding:30px; box-shadow:var(--shadow); }
+  .contact-card h3 { color:var(--g-dark); margin-bottom:12px; font-size:1.3rem; }
+  .contact-card p { margin-bottom:8px; font-size:.96rem; }
+  .contact-card a:not(.btn) { color:var(--g-dark); font-weight:500; text-decoration:none; }
+  [data-theme="dark"] .contact-card a:not(.btn), [data-theme="dark"] .contact-card h3 { color:var(--g); }
 
-  /* Form */
-  form.msg {
-    max-width: 580px; margin: auto; background: var(--surface); padding: 34px 30px;
-    border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border);
-    display: flex; flex-direction: column; gap: 16px;
-  }
-  form.msg input, form.msg textarea {
-    width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px;
-    font-family: inherit; font-size: 1rem; background: var(--bg); color: var(--text);
-  }
-  .form-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-  .form-actions .btn { flex: 1; text-align: center; }
+  form.msg { max-width:580px; margin:auto; background:var(--surface); padding:34px 30px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); display:flex; flex-direction:column; gap:16px; }
+  form.msg input, form.msg textarea { width:100%; padding:14px 16px; border:1px solid var(--border); border-radius:12px; font-family:inherit; font-size:1rem; background:var(--bg); color:var(--text); }
+  form.msg input:focus, form.msg textarea:focus { outline:none; border-color:var(--g); box-shadow:0 0 0 4px rgba(67,160,71,.18); }
+  .actions { display:flex; gap:12px; flex-wrap:wrap; }
+  .actions .btn { flex:1; text-align:center; }
 
-  footer { background: #1b5e20; color: #fff; text-align: center; padding: 34px 20px; font-size: 0.92rem; }
-  footer a { color: #c8e6c9; }
+  footer { background:#1b5e20; color:#fff; text-align:center; padding:34px 20px; font-size:.92rem; }
+  footer img { height:46px; margin-bottom:8px; }
+  .fab { position:fixed; right:20px; bottom:20px; z-index:90; width:54px; height:54px; border-radius:50%; background:#25d366; color:#fff; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.5rem; box-shadow:0 8px 22px rgba(0,0,0,.3); }
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s,transform .7s; }
+  .reveal.show { opacity:1; transform:none; }
 
-  /* Floating buttons */
-  .fab {
-    position: fixed; right: 20px; z-index: 90; width: 54px; height: 54px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; text-decoration: none;
-    font-size: 1.5rem; box-shadow: 0 8px 22px rgba(0,0,0,0.3); border: none; cursor: pointer;
-    transition: transform 0.25s;
-  }
-  .fab:hover { transform: scale(1.1); }
-  .fab.wa { bottom: 20px; background: #25d366; color: #fff; }
-  .fab.top { bottom: 86px; background: var(--green-dark); color: #fff; opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.25s; }
-  .fab.top.show { opacity: 1; pointer-events: auto; }
-
-  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s, transform 0.7s; }
-  .reveal.show { opacity: 1; transform: none; }
-
-  @media (max-width: 820px) {
-    .hero-inner, .calc-box { grid-template-columns: 1fr; }
-    #menu-btn { display: block; }
-    .nav-links {
-      position: absolute; top: 100%; left: 0; right: 0; background: var(--surface);
-      flex-direction: column; align-items: stretch; padding: 12px 20px 20px; gap: 4px;
-      box-shadow: 0 14px 24px rgba(0,0,0,0.12); display: none;
-    }
-    .nav-links.open { display: flex; }
-    .nav-links a { display: block; text-align: center; }
-    .btn-outline { margin: 12px 0 0; }
-    .director-card { flex-direction: column; }
-    section { padding: 58px 20px; }
-    .calc-form { grid-template-columns: 1fr 1fr; }
+  @media (max-width:820px) {
+    .hero-in { grid-template-columns:1fr; }
+    #menuBtn { display:block; }
+    .links { position:absolute; top:100%; left:0; right:0; background:var(--surface); flex-direction:column; align-items:stretch; padding:12px 20px 20px; box-shadow:0 14px 24px rgba(0,0,0,.12); display:none; }
+    .links.open { display:flex; }
+    .links a { display:block; text-align:center; }
+    .btn-out { margin:12px 0 0; }
+    .director { flex-direction:column; }
+    section { padding:58px 20px; }
   }
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="nav-inner">
-    <a class="brand" href="#top"><img src="logo.png" alt="AquaColor Logo" /><span>AQUACOLOR</span></a>
-    <ul class="nav-links" id="nav-links">
+<header>
+  <div class="nav">
+    <a class="brand" href="#top"><img src="logo-icon.svg" alt="AquaColor logo"> AQUACOLOR</a>
+    <ul class="links" id="links">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
-      <li><a href="#calc">Paint Calculator</a></li>
+      <li><a href="#process">How We Work</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="join-team.html">Join Our Team</a></li>
       <li><a href="#contact" class="cta">Contact Us</a></li>
     </ul>
-    <div style="display:flex; gap:8px;">
-      <button class="icon-btn" id="theme-btn" aria-label="Toggle dark mode">🌙</button>
-      <button class="icon-btn" id="menu-btn" aria-label="Open menu">☰</button>
+    <div style="display:flex;gap:8px;">
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode">🌙</button>
+      <button class="icon-btn" id="menuBtn" aria-label="Open menu">☰</button>
     </div>
   </div>
 </header>
 
 <div class="hero" id="top">
-  <div class="blob b1"></div><div class="blob b2"></div>
-  <div class="hero-inner">
+  <div class="hero-in">
     <div>
-      <span class="tag">🎨 Family-run • Diepsloot, Johannesburg</span>
-      <h1>Colour your space.<br><span>Power your home.</span></h1>
-      <p>Professional painting, plus electrical wiring and embedded circuit design, delivered with care, precision and a service that feels like family.</p>
-      <a href="#calc" class="btn btn-light">Estimate Your Paint</a>
-      <a href="#contact" class="btn btn-outline">Get a Free Quote</a>
+      <span class="tag">Family-run • Diepsloot, Johannesburg</span>
+      <h1>Paint. Power.<br><span>Solar. Projects.</span></h1>
+      <p>From a fresh coat of paint to electrical work, solar installation assistance, project management support and website creation. One team that treats your project like family.</p>
+      <a href="#contact" class="btn btn-light">Get a Free Quote</a>
+      <a href="#services" class="btn btn-out">Our Services</a>
     </div>
     <div class="hero-card">
-      <img src="logo.png" alt="AquaColor Logo" />
-      <div class="stats">
-        <div class="stat"><b data-count="7">0</b><small>Painting services</small></div>
-        <div class="stat"><b data-count="3">0</b><small>Electrical services</small></div>
-        <div class="stat"><b data-count="1">0</b><small>Family you can trust</small></div>
-      </div>
+      <img src="logo-icon.svg" alt="AquaColor logo">
+      <ul>
+        <li>🎨 Painting</li>
+        <li>⚡ Electrical</li>
+        <li>☀️ Solar Installation Assistance</li>
+        <li>📋 Project Management Assistance</li>
+        <li>💻 Website Creation</li>
+      </ul>
     </div>
   </div>
 </div>
 
 <section id="about">
   <div class="wrap reveal">
-    <div class="section-title"><h2>About Us</h2><div class="bar"></div></div>
-    <p class="lead">AQUACOLOR is a family-run painting company. We are passionate about delivering high-quality painting solutions that bring life to your home or business. From colorful accent walls to full property makeovers, we specialize in making your vision come to life with professionalism, precision, and care. Trust AquaColor for vibrant, lasting impressions and a service that feels like family.</p>
+    <div class="title"><h2>About Us</h2><div class="bar"></div></div>
+    <p class="lead">AQUACOLOR is a family-run company. We started with painting and now also offer electrical work, solar installation assistance, project management assistance and website creation. We are passionate about delivering high-quality work for your home or business, with professionalism, precision and care.</p>
   </div>
 </section>
 
-<section id="services" style="background: var(--surface);">
+<section id="services" style="background:var(--surface);">
   <div class="wrap">
-    <div class="section-title reveal"><h2>Our Services</h2><div class="bar"></div></div>
+    <div class="title reveal"><h2>Our Services</h2><div class="bar"></div></div>
     <div class="tabs reveal">
-      <button class="tab active" data-filter="all">All</button>
-      <button class="tab" data-filter="paint">🎨 Painting</button>
-      <button class="tab" data-filter="electric">⚡ Electrical &amp; Embedded</button>
+      <button class="tab active" data-f="all">All</button>
+      <button class="tab" data-f="paint">🎨 Painting</button>
+      <button class="tab" data-f="electric">⚡ Electrical</button>
+      <button class="tab" data-f="solar">☀️ Solar</button>
+      <button class="tab" data-f="pm">📋 Project Management</button>
+      <button class="tab" data-f="web">💻 Websites</button>
     </div>
     <div class="grid">
-      <div class="card reveal" data-cat="paint"><div class="icon">🏠</div><h3>Interior Painting</h3></div>
-      <div class="card reveal" data-cat="paint"><div class="icon">🎨</div><h3>Exterior Painting</h3></div>
-      <div class="card reveal" data-cat="paint"><div class="icon">🏗️</div><h3>Roof Painting</h3></div>
-      <div class="card reveal" data-cat="paint"><div class="icon">✨</div><h3>Accent Walls &amp; Decorative Finishes</h3></div>
-      <div class="card reveal" data-cat="paint"><div class="icon">🌈</div><h3>Colour Selection Advice</h3></div>
-      <div class="card reveal" data-cat="paint"><div class="icon">🖌️</div><h3>Touch-Ups &amp; Paint Maintenance</h3></div>
-      <div class="card reveal" data-cat="paint"><div class="icon">💧</div><h3>Basic Waterproofing Services</h3></div>
-      <div class="card reveal" data-cat="electric"><div class="icon">🔌</div><h3>Embedded C circuit designs and consultations</h3></div>
-      <div class="card reveal" data-cat="electric"><div class="icon">⚡</div><h3>Electrical system maintenance</h3></div>
-      <div class="card reveal" data-cat="electric"><div class="icon">💡</div><h3>Home electric wiring</h3></div>
+      <div class="card reveal" data-c="paint"><div class="ico">🏠</div><h3>Interior Painting</h3></div>
+      <div class="card reveal" data-c="paint"><div class="ico">🎨</div><h3>Exterior Painting</h3></div>
+      <div class="card reveal" data-c="paint"><div class="ico">🏗️</div><h3>Roof Painting</h3></div>
+      <div class="card reveal" data-c="paint"><div class="ico">✨</div><h3>Accent Walls &amp; Decorative Finishes</h3></div>
+      <div class="card reveal" data-c="paint"><div class="ico">🌈</div><h3>Colour Selection Advice</h3></div>
+      <div class="card reveal" data-c="paint"><div class="ico">🖌️</div><h3>Touch-Ups &amp; Paint Maintenance</h3></div>
+      <div class="card reveal" data-c="paint"><div class="ico">💧</div><h3>Basic Waterproofing Services</h3></div>
+      <div class="card reveal" data-c="electric"><div class="ico">💡</div><h3>Home Electric Wiring</h3></div>
+      <div class="card reveal" data-c="electric"><div class="ico">⚡</div><h3>Electrical System Maintenance</h3></div>
+      <div class="card reveal new" data-c="solar"><div class="ico">☀️</div><h3>Solar Installation Assistance</h3><p>Hands-on support with planning and installing solar systems.</p></div>
+      <div class="card reveal new" data-c="pm"><div class="ico">📋</div><h3>Project Management Assistance</h3><p>Help planning, organising and keeping your project on track.</p></div>
+      <div class="card reveal new" data-c="web"><div class="ico">💻</div><h3>Website Creation</h3><p>Modern, mobile-friendly websites for your business, built from scratch.</p></div>
     </div>
   </div>
 </section>
 
-<section id="calc">
+<section id="process">
   <div class="wrap">
-    <div class="section-title reveal">
-      <h2>Paint Calculator</h2>
-      <p>Get a quick idea of how much paint a room needs before you ask for a quote.</p>
-      <div class="bar"></div>
-    </div>
-    <div class="calc-box reveal">
-      <div class="calc-form">
-        <div><label for="cl">Room length (m)</label><input type="number" id="cl" value="4" min="0" step="0.1"></div>
-        <div><label for="cw">Room width (m)</label><input type="number" id="cw" value="3.5" min="0" step="0.1"></div>
-        <div><label for="ch">Wall height (m)</label><input type="number" id="ch" value="2.4" min="0" step="0.1"></div>
-        <div><label for="cc">Coats</label><input type="number" id="cc" value="2" min="1" max="5"></div>
-        <div><label for="cd">Doors &amp; windows</label><input type="number" id="cd" value="3" min="0"></div>
-        <div><label for="cov">Coverage (m² per litre)</label><input type="number" id="cov" value="10" min="1" step="0.5"></div>
-        <label class="check full"><input type="checkbox" id="ceil"> Include the ceiling</label>
-      </div>
-      <div class="calc-result">
-        <div>Paint needed</div>
-        <div class="big"><span id="litres">0</span> L</div>
-        <small>Painted area: <span id="area">0</span> m²<br>Estimate only. Doors and windows count as about 1.8 m² each. Coverage depends on the paint you choose.</small>
-        <a href="#contact" class="btn btn-light">Request a Quote</a>
-      </div>
+    <div class="title reveal"><h2>How We Work</h2><div class="bar"></div></div>
+    <div class="steps">
+      <div class="step reveal"><h3>Get in touch</h3><p>Message or call us and tell us what you need.</p></div>
+      <div class="step reveal"><h3>Quote</h3><p>We assess the job and give you a clear quote.</p></div>
+      <div class="step reveal"><h3>We do the work</h3><p>Our team gets it done with care and precision.</p></div>
+      <div class="step reveal"><h3>Handover</h3><p>We check everything with you before we finish.</p></div>
     </div>
   </div>
 </section>
 
-<section id="projects" style="background: var(--surface);">
+<section id="projects" style="background:var(--surface);">
   <div class="wrap">
-    <div class="section-title reveal">
-      <h2>Our Projects</h2>
-      <p>Drag the slider to see the before and after.</p>
-      <div class="bar"></div>
-    </div>
-    <div class="proj-grid" id="project-gallery">Loading...</div>
+    <div class="title reveal"><h2>Our Projects</h2><p>Drag the slider to see the before and after.</p><div class="bar"></div></div>
+    <div class="proj-grid" id="gallery">Loading...</div>
   </div>
 </section>
 
 <section id="team">
   <div class="wrap">
-    <div class="section-title reveal"><h2>Meet Our Directors</h2><div class="bar"></div></div>
-    <div class="team-grid">
-      <div id="director-list" class="reveal">Loading...</div>
+    <div class="title reveal"><h2>Meet Our Directors</h2><div class="bar"></div></div>
+    <div class="two">
+      <div id="directors" class="reveal">Loading...</div>
       <div id="contact" class="contact-card reveal">
         <h3>Contact Us</h3>
         <p><strong>Phone:</strong> <a href="tel:+27765006229">076 500 6229</a> / <a href="tel:+27731887519">073 188 7519</a></p>
         <p><strong>Email:</strong> <a href="mailto:enquire@aquacolor.org">enquire@aquacolor.org</a></p>
         <p><strong>Location:</strong> Diepsloot, Johannesburg</p>
-        <a href="https://wa.me/+27765006229" target="_blank" rel="noopener" class="btn btn-wa" style="margin-top:16px;">💬 Chat on WhatsApp</a>
+        <a href="https://wa.me/27765006229" target="_blank" rel="noopener" class="btn btn-wa" style="margin-top:14px;">💬 Chat on WhatsApp</a>
       </div>
     </div>
   </div>
 </section>
 
-<section id="message-form">
+<section id="message">
   <div class="wrap reveal">
-    <div class="section-title"><h2>Send Us a Message</h2><div class="bar"></div></div>
-    <form class="msg" id="msgForm" action="https://formsubmit.co/enquire@aquacolor.org" method="POST" target="_blank">
+    <div class="title"><h2>Send Us a Message</h2><div class="bar"></div></div>
+    <form class="msg" action="https://formsubmit.co/enquire@aquacolor.org" method="POST" target="_blank">
       <input type="hidden" name="_next" value="https://www.aquacolor.org/thank-you.html">
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_subject" value="New message from AquaColor website">
@@ -415,7 +265,7 @@
       <input type="text" name="name" id="fname" placeholder="Your Name" required>
       <input type="email" name="email" placeholder="Your Email" required>
       <textarea name="message" id="fmsg" placeholder="Tell us about your project..." rows="5" required></textarea>
-      <div class="form-actions">
+      <div class="actions">
         <button type="submit" class="btn btn-green">✉️ Send by Email</button>
         <button type="button" class="btn btn-wa" id="waSend">💬 Send via WhatsApp</button>
       </div>
@@ -424,98 +274,69 @@
 </section>
 
 <footer>
+  <img src="logo-icon.svg" alt="AquaColor logo"><br>
+  <p>Paint • Power • Solar • Projects</p>
   <p>&copy; 2025 AQUACOLOR. All rights reserved.</p>
 </footer>
 
-<a href="https://wa.me/+27765006229" target="_blank" rel="noopener" class="fab wa" aria-label="WhatsApp">💬</a>
-<button class="fab top" id="toTop" aria-label="Back to top">↑</button>
+<a href="https://wa.me/27765006229" target="_blank" rel="noopener" class="fab" aria-label="WhatsApp">💬</a>
 
 <script>
-  // ---------- Dark mode ----------
-  const root = document.documentElement;
-  const themeBtn = document.getElementById('theme-btn');
-  function setTheme(t) {
-    root.setAttribute('data-theme', t);
-    themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
-    try { localStorage.setItem('aq-theme', t); } catch (e) {}
-  }
-  let saved = null;
-  try { saved = localStorage.getItem('aq-theme'); } catch (e) {}
-  setTheme(saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
-  themeBtn.addEventListener('click', () => setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+  // Dark mode
+  const root = document.documentElement, themeBtn = document.getElementById('themeBtn');
+  function setTheme(t){ root.setAttribute('data-theme', t); themeBtn.textContent = t === 'dark' ? '☀️' : '🌙'; try{ localStorage.setItem('aq-theme', t); }catch(e){} }
+  let saved = null; try{ saved = localStorage.getItem('aq-theme'); }catch(e){}
+  setTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  themeBtn.onclick = () => setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 
-  // ---------- Mobile menu ----------
-  const navLinks = document.getElementById('nav-links');
-  document.getElementById('menu-btn').addEventListener('click', () => navLinks.classList.toggle('open'));
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+  // Mobile menu
+  const links = document.getElementById('links');
+  document.getElementById('menuBtn').onclick = () => links.classList.toggle('open');
+  links.querySelectorAll('a').forEach(a => a.onclick = () => links.classList.remove('open'));
 
-  // ---------- Service tabs ----------
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const f = tab.dataset.filter;
-      document.querySelectorAll('#services .card').forEach(c => {
-        c.classList.toggle('hide', f !== 'all' && c.dataset.cat !== f);
-      });
-    });
+  // Service tabs
+  document.querySelectorAll('.tab').forEach(tab => tab.onclick = () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('#services .card').forEach(c => c.classList.toggle('hide', tab.dataset.f !== 'all' && c.dataset.c !== tab.dataset.f));
   });
 
-  // ---------- Paint calculator ----------
-  const ids = ['cl', 'cw', 'ch', 'cc', 'cd', 'cov', 'ceil'];
-  function calc() {
-    const v = id => parseFloat(document.getElementById(id).value) || 0;
-    const L = v('cl'), W = v('cw'), H = v('ch'), coats = Math.max(1, v('cc')), openings = v('cd'), cov = Math.max(1, v('cov'));
-    let area = 2 * (L + W) * H - openings * 1.8;
-    if (document.getElementById('ceil').checked) area += L * W;
-    area = Math.max(0, area);
-    document.getElementById('area').textContent = area.toFixed(1);
-    document.getElementById('litres').textContent = Math.ceil((area * coats) / cov);
-  }
-  ids.forEach(id => document.getElementById(id).addEventListener('input', calc));
-  calc();
+  // Directors
+  fetch('directors.json').then(r => { if(!r.ok) throw 0; return r.json(); }).then(list => {
+    const el = document.getElementById('directors');
+    el.innerHTML = list.length ? '' : '<p>No directors found.</p>';
+    list.forEach(d => {
+      const div = document.createElement('div');
+      div.className = 'director';
+      div.innerHTML = `<img src="${d.image}" alt="${d.name} photo"><div><h3>${d.name}</h3><p><strong>Role:</strong> ${d.role}</p><p>${d.bio}</p></div>`;
+      el.appendChild(div);
+    });
+  }).catch(() => document.getElementById('directors').innerHTML = '<p>Could not load directors data.</p>');
 
-  // ---------- Directors ----------
-  async function loadDirectors() {
-    const el = document.getElementById('director-list');
-    try {
-      const res = await fetch('directors.json');
-      if (!res.ok) throw new Error('Failed to load directors.json');
-      const directors = await res.json();
-      if (!directors.length) { el.innerHTML = '<p>No directors found.</p>'; return; }
-      el.innerHTML = '';
-      directors.forEach(d => {
-        const div = document.createElement('div');
-        div.className = 'director-card';
-        div.innerHTML = `
-          <img src="${d.image}" alt="${d.name} photo" />
-          <div class="director-info">
-            <h3>${d.name}</h3>
-            <p><strong>Role:</strong> ${d.role}</p>
-            <p>${d.bio}</p>
-          </div>`;
-        el.appendChild(div);
-      });
-    } catch (err) {
-      el.innerHTML = '<p>Could not load directors data.</p>';
-      console.error(err);
-    }
-  }
+  // Projects with before/after slider
+  fetch('projects.json').then(r => { if(!r.ok) throw 0; return r.json(); }).then(list => {
+    const g = document.getElementById('gallery');
+    g.innerHTML = list.length ? '' : '<p>No projects yet.</p>';
+    list.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'proj';
+      card.innerHTML = `<h3>${p.name}</h3><div class="ba"><img src="${p.after}" alt="After ${p.name}"><img class="before" src="${p.before}" alt="Before ${p.name}"><div class="line"></div><span class="lbl l">Before</span><span class="lbl r">After</span><input type="range" min="0" max="100" value="50" aria-label="Before and after slider"></div>`;
+      const ba = card.querySelector('.ba');
+      card.querySelector('input').oninput = e => ba.style.setProperty('--pos', e.target.value + '%');
+      g.appendChild(card);
+    });
+  }).catch(() => document.getElementById('gallery').innerHTML = '<p>Could not load project images.</p>');
 
-  // ---------- Projects (before / after sliders) ----------
-  async function loadProjects() {
-    const gallery = document.getElementById('project-gallery');
-    try {
-      const res = await fetch('projects.json');
-      if (!res.ok) throw new Error('Failed to load projects.json');
-      const projects = await res.json();
-      if (!projects.length) { gallery.innerHTML = '<p>No projects yet.</p>'; return; }
-      gallery.innerHTML = '';
-      projects.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'proj reveal show';
-        card.innerHTML = `
-          <h3>${p.name}</h3>
-          <div class="ba">
-            <img src="${p.after}" alt="After ${p.name}">
-            <img class="before" src="${p.before}" alt="Before ${p.name}">
+  // WhatsApp send
+  document.getElementById('waSend').onclick = () => {
+    const n = document.getElementById('fname').value.trim(), m = document.getElementById('fmsg').value.trim();
+    if(!n || !m){ alert('Please enter your name and message first.'); return; }
+    open('https://wa.me/27765006229?text=' + encodeURIComponent(`Hi AquaColor, my name is ${n}. ${m}`), '_blank');
+  };
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
